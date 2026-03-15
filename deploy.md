@@ -7,12 +7,11 @@
 
 ## 현재 미완료 항목
 
-### Sprint 6 — Claude Vision API 연동 알약 분석 (2026-03-15)
+### Sprint 7 — 핵심 모듈 단위 테스트 (2026-03-16)
 
-- ✅ `docker compose up --build` 프론트엔드 + 백엔드 통합 기동 확인
-- ✅ 알약 이미지 업로드 후 Vision API 결과 카드 표시 확인 (`ANTHROPIC_API_KEY` 설정 후)
-- ✅ `ANTHROPIC_API_KEY` 미설정 환경에서 graceful fallback 동작 확인
-- ✅ UI 디자인 시각적 품질 확인 (모바일 375px 포함)
+- ✅ `pytest backend/tests/ -v` 전체 40개 통과
+- ✅ 외부 API 실제 호출 없음 (unittest.mock 완전 격리)
+- ⬜ Docker 빌드 후 통합 기동 확인 (`docker compose up --build`)
 
 ---
 

@@ -212,10 +212,36 @@ def setup_function():
 
 - ✅ `test_vision_identifier.py` 8개 테스트 작성 및 통과
 - ✅ `test_pill_identifier.py` 16개 테스트 작성 및 통과
-- ✅ `test_drug_api.py` 6개 테스트 작성 및 통과
+- ✅ `test_drug_api.py` 8개 테스트 작성 및 통과
 - ✅ `pytest backend/tests/ -v` 전체 통과 (기존 통합 테스트 포함)
 - ✅ 테스트 실행 중 실제 외부 API 호출 없음
 - ✅ `sprint7` 브랜치에서 작업 완료
+
+---
+
+## 검증 결과 (2026-03-16)
+
+### 자동 검증
+
+```
+pytest backend/tests/ -v
+40 passed in 0.70s
+```
+
+| 테스트 파일 | 테스트 수 | 결과 |
+|------------|----------|------|
+| `test_vision_identifier.py` | 8 | ✅ 전체 통과 |
+| `test_pill_identifier.py` | 16 | ✅ 전체 통과 |
+| `test_drug_api.py` | 8 | ✅ 전체 통과 |
+| `test_analyze.py` (기존) | 8 | ✅ 전체 통과 |
+| **합계** | **40** | **✅ 전체 통과** |
+
+- ✅ 외부 API 실제 호출 없음 (unittest.mock 완전 격리)
+- ✅ `DRUG_API_KEY`, `ANTHROPIC_API_KEY` 미설정 환경에서도 전체 통과
+
+### 수동 검증
+
+- ⬜ Docker 빌드 후 통합 기동 확인 (`docker compose up --build`)
 
 ---
 
