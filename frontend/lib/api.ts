@@ -1,20 +1,52 @@
-// 분석 결과 타입 정의
+// 약품 정보 타입
+export type DrugInfo = {
+  drug_name: string;
+  generic_name: string;
+  usage: string;
+  caution: string;
+  dosage: string;
+  matched: boolean;
+};
+
+// 분석 데이터 타입
+export type AnalysisData = {
+  image_type: 'prescription' | 'packaged_drug' | 'unknown';
+  extracted_text: string;
+  drugs: DrugInfo[];
+  warnings: string[];
+};
+
+// 분석 결과 타입
 export type AnalysisResult = {
   status: 'success' | 'error';
-  data?: unknown;
+  data?: AnalysisData;
   message?: string;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+
 /**
- * 이미지 분석 함수 (Sprint 3에서 실제 OCR API로 교체 예정)
- * 현재는 2초 지연 후 성공 응답을 반환하는 stub
+ * 이미지 분석 함수 — 백엔드 OCR API 호출
  */
 export async function analyzeImage(file: File): Promise<AnalysisResult> {
   console.log('[analyzeImage] 분석 시작:', file.name, file.type, file.size);
 
-  // Sprint 3 교체 예정: 실제 백엔드 OCR API 호출
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const formData = new FormData();
+  formData.append('file', file);
 
-  console.log('[analyzeImage] 분석 완료');
-  return { status: 'success' };
+  const response = await fetch(`${API_URL}/analyze`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    const message = errorBody?.detail ?? `서버 오류 (HTTP ${response.status})`;
+    console.error('[analyzeImage] 오류:', message);
+    return { status: 'error', message };
+  }
+
+  const result: AnalysisResult = await response.json();
+  console.log('[analyzeImage] 분석 완료:', result);
+  return result;
 }

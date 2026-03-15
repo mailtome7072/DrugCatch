@@ -1,0 +1,366 @@
+[
+  {
+    "drug_name": "타이레놀",
+    "generic_name": "아세트아미노펜",
+    "usage": "해열, 진통",
+    "caution": "간질환 환자 주의, 음주 시 복용 금지",
+    "dosage": "1회 500mg, 1일 3-4회, 4-6시간 간격"
+  },
+  {
+    "drug_name": "아세트아미노펜",
+    "generic_name": "아세트아미노펜",
+    "usage": "해열, 진통",
+    "caution": "간질환 환자 주의, 음주 시 복용 금지",
+    "dosage": "1회 500mg, 1일 3-4회, 4-6시간 간격"
+  },
+  {
+    "drug_name": "이부프로펜",
+    "generic_name": "이부프로펜",
+    "usage": "해열, 진통, 소염",
+    "caution": "위장장애 주의, 식후 복용 권장, 신장질환 환자 주의",
+    "dosage": "1회 200-400mg, 1일 3회, 6-8시간 간격"
+  },
+  {
+    "drug_name": "애드빌",
+    "generic_name": "이부프로펜",
+    "usage": "해열, 진통, 소염",
+    "caution": "위장장애 주의, 식후 복용 권장",
+    "dosage": "1회 200-400mg, 1일 3회"
+  },
+  {
+    "drug_name": "나프록센",
+    "generic_name": "나프록센",
+    "usage": "진통, 소염, 해열",
+    "caution": "위장장애, 심혈관계 질환 주의",
+    "dosage": "1회 250-500mg, 1일 2회"
+  },
+  {
+    "drug_name": "아목시실린",
+    "generic_name": "아목시실린",
+    "usage": "세균성 감염 치료 (폐렴, 요로감염, 피부감염)",
+    "caution": "페니실린 알레르기 환자 금지, 알레르기 반응 주의",
+    "dosage": "1회 250-500mg, 1일 3회, 7-14일"
+  },
+  {
+    "drug_name": "아지스로마이신",
+    "generic_name": "아지스로마이신",
+    "usage": "세균성 감염 치료 (호흡기, 피부, 성병)",
+    "caution": "간질환 환자 주의, QT 연장 주의",
+    "dosage": "1일 1회 500mg, 3일간 또는 첫날 500mg 후 250mg 4일"
+  },
+  {
+    "drug_name": "세프트리악손",
+    "generic_name": "세프트리악손",
+    "usage": "중증 세균성 감염 치료",
+    "caution": "페니실린 알레르기 환자 교차반응 주의",
+    "dosage": "1일 1-2g, 주사 투여"
+  },
+  {
+    "drug_name": "독시사이클린",
+    "generic_name": "독시사이클린",
+    "usage": "세균성 감염, 말라리아 예방",
+    "caution": "임산부 금지, 8세 미만 금지, 자외선 과민 반응",
+    "dosage": "1회 100mg, 1일 1-2회"
+  },
+  {
+    "drug_name": "시프로플록사신",
+    "generic_name": "시프로플록사신",
+    "usage": "요로감염, 폐렴, 장염",
+    "caution": "18세 미만 주의, 건염 위험, 유제품과 함께 복용 금지",
+    "dosage": "1회 250-750mg, 1일 2회"
+  },
+  {
+    "drug_name": "암로디핀",
+    "generic_name": "암로디핀베실산염",
+    "usage": "고혈압, 협심증 치료",
+    "caution": "저혈압 주의, 갑자기 중단 금지",
+    "dosage": "1일 1회 5-10mg"
+  },
+  {
+    "drug_name": "노바스크",
+    "generic_name": "암로디핀베실산염",
+    "usage": "고혈압, 협심증 치료",
+    "caution": "저혈압 주의, 갑자기 중단 금지",
+    "dosage": "1일 1회 5-10mg"
+  },
+  {
+    "drug_name": "리시노프릴",
+    "generic_name": "리시노프릴",
+    "usage": "고혈압, 심부전 치료",
+    "caution": "임산부 금지, 혈관부종 주의, 칼륨 보충제 주의",
+    "dosage": "1일 1회 10-40mg"
+  },
+  {
+    "drug_name": "로사르탄",
+    "generic_name": "로사르탄칼륨",
+    "usage": "고혈압 치료, 당뇨병성 신증",
+    "caution": "임산부 금지, 고칼륨혈증 주의",
+    "dosage": "1일 1회 50-100mg"
+  },
+  {
+    "drug_name": "아테놀올",
+    "generic_name": "아테놀올",
+    "usage": "고혈압, 협심증, 부정맥",
+    "caution": "천식 환자 주의, 갑자기 중단 금지",
+    "dosage": "1일 1-2회 25-100mg"
+  },
+  {
+    "drug_name": "메트포르민",
+    "generic_name": "메트포르민염산염",
+    "usage": "제2형 당뇨병 치료",
+    "caution": "신장질환 주의, 조영제 사용 시 일시 중단, 식후 복용",
+    "dosage": "1일 2-3회 500-850mg, 식사와 함께"
+  },
+  {
+    "drug_name": "다이아벡스",
+    "generic_name": "메트포르민염산염",
+    "usage": "제2형 당뇨병 치료",
+    "caution": "신장질환 주의, 조영제 사용 시 일시 중단",
+    "dosage": "1일 2-3회 500-850mg"
+  },
+  {
+    "drug_name": "글리메피리드",
+    "generic_name": "글리메피리드",
+    "usage": "제2형 당뇨병 치료",
+    "caution": "저혈당 주의, 식사 30분 전 복용, 음주 주의",
+    "dosage": "1일 1회 1-4mg, 아침 식사 전"
+  },
+  {
+    "drug_name": "인슐린",
+    "generic_name": "인슐린",
+    "usage": "당뇨병 혈당 조절",
+    "caution": "저혈당 주의, 냉장 보관, 주사 부위 교체",
+    "dosage": "의사 처방에 따라 개별 조절"
+  },
+  {
+    "drug_name": "시타글립틴",
+    "generic_name": "시타글립틴인산염",
+    "usage": "제2형 당뇨병 치료",
+    "caution": "췌장염 증상 주의, 신장 기능 저하 시 용량 조절",
+    "dosage": "1일 1회 100mg"
+  },
+  {
+    "drug_name": "오메프라졸",
+    "generic_name": "오메프라졸",
+    "usage": "위궤양, 역류성 식도염, 과산증",
+    "caution": "장기 복용 시 마그네슘 결핍, 골다공증 주의",
+    "dosage": "1일 1회 20-40mg, 식전 30분"
+  },
+  {
+    "drug_name": "판토프라졸",
+    "generic_name": "판토프라졸나트륨",
+    "usage": "위궤양, 역류성 식도염",
+    "caution": "장기 복용 시 골밀도 감소 주의",
+    "dosage": "1일 1회 40mg, 식전"
+  },
+  {
+    "drug_name": "란소프라졸",
+    "generic_name": "란소프라졸",
+    "usage": "위궤양, 역류성 식도염, 헬리코박터 제균",
+    "caution": "장기 복용 주의, 간질환 환자 감량",
+    "dosage": "1일 1-2회 15-30mg"
+  },
+  {
+    "drug_name": "레바미피드",
+    "generic_name": "레바미피드",
+    "usage": "위염, 위궤양 치료",
+    "caution": "임산부 주의, 드물게 혈액장애",
+    "dosage": "1일 3회 100mg, 식후 및 취침 전"
+  },
+  {
+    "drug_name": "돔페리돈",
+    "generic_name": "돔페리돈",
+    "usage": "구역질, 구토, 소화불량",
+    "caution": "심장질환 환자 주의, QT 연장 위험",
+    "dosage": "1회 10mg, 1일 3회, 식전"
+  },
+  {
+    "drug_name": "세티리진",
+    "generic_name": "세티리진염산염",
+    "usage": "알레르기 비염, 두드러기, 가려움증",
+    "caution": "졸음 유발 가능, 운전 주의",
+    "dosage": "1일 1회 10mg, 취침 전 권장"
+  },
+  {
+    "drug_name": "지르텍",
+    "generic_name": "세티리진염산염",
+    "usage": "알레르기 비염, 두드러기",
+    "caution": "졸음 유발 가능, 운전 주의",
+    "dosage": "1일 1회 10mg"
+  },
+  {
+    "drug_name": "로라타딘",
+    "generic_name": "로라타딘",
+    "usage": "알레르기 비염, 두드러기",
+    "caution": "졸음이 적은 항히스타민제",
+    "dosage": "1일 1회 10mg"
+  },
+  {
+    "drug_name": "클라리틴",
+    "generic_name": "로라타딘",
+    "usage": "알레르기 비염, 두드러기",
+    "caution": "간질환 환자 격일 복용",
+    "dosage": "1일 1회 10mg"
+  },
+  {
+    "drug_name": "펙소페나딘",
+    "generic_name": "펙소페나딘염산염",
+    "usage": "알레르기 비염, 만성 두드러기",
+    "caution": "주스(자몽, 오렌지)와 함께 복용 금지 — 흡수 감소",
+    "dosage": "1일 2회 60mg 또는 1회 180mg"
+  },
+  {
+    "drug_name": "알레그라",
+    "generic_name": "펙소페나딘염산염",
+    "usage": "알레르기 비염, 두드러기",
+    "caution": "자몽주스와 함께 복용 금지",
+    "dosage": "1일 2회 60mg 또는 1회 180mg"
+  },
+  {
+    "drug_name": "아토르바스타틴",
+    "generic_name": "아토르바스타틴칼슘",
+    "usage": "고지혈증, 심혈관 질환 예방",
+    "caution": "근육통 주의, 간 기능 모니터링, 임산부 금지",
+    "dosage": "1일 1회 10-80mg, 취침 전"
+  },
+  {
+    "drug_name": "리피토르",
+    "generic_name": "아토르바스타틴칼슘",
+    "usage": "고지혈증 치료",
+    "caution": "근육통 주의, 자몽주스 주의",
+    "dosage": "1일 1회 10-80mg"
+  },
+  {
+    "drug_name": "로수바스타틴",
+    "generic_name": "로수바스타틴칼슘",
+    "usage": "고지혈증, 심혈관 질환 예방",
+    "caution": "근육통, 간 기능 이상 주의, 아시아인 저용량 시작",
+    "dosage": "1일 1회 5-20mg"
+  },
+  {
+    "drug_name": "크레스토르",
+    "generic_name": "로수바스타틴칼슘",
+    "usage": "고지혈증 치료",
+    "caution": "아시아인 저용량 권장",
+    "dosage": "1일 1회 5-20mg"
+  },
+  {
+    "drug_name": "아스피린",
+    "generic_name": "아스피린",
+    "usage": "해열, 진통, 소염, 혈전 예방",
+    "caution": "소아 바이러스 감염 금지(라이증후군), 위장장애, 출혈 주의",
+    "dosage": "진통: 300-600mg, 혈전예방: 100mg/일"
+  },
+  {
+    "drug_name": "클로피도그렐",
+    "generic_name": "클로피도그렐황산수소염",
+    "usage": "혈전 예방 (심근경색, 뇌졸중 후)",
+    "caution": "출혈 주의, 수술 전 중단 필요",
+    "dosage": "1일 1회 75mg"
+  },
+  {
+    "drug_name": "플라빅스",
+    "generic_name": "클로피도그렐황산수소염",
+    "usage": "혈전 예방",
+    "caution": "출혈 주의",
+    "dosage": "1일 1회 75mg"
+  },
+  {
+    "drug_name": "레보티록신",
+    "generic_name": "레보티록신나트륨",
+    "usage": "갑상선기능저하증 치료",
+    "caution": "아침 공복 복용, 다른 약과 4시간 간격, 심장질환 주의",
+    "dosage": "1일 1회 50-200mcg, 아침 공복"
+  },
+  {
+    "drug_name": "씬지로이드",
+    "generic_name": "레보티록신나트륨",
+    "usage": "갑상선기능저하증",
+    "caution": "공복 복용 필수",
+    "dosage": "1일 1회 50-200mcg"
+  },
+  {
+    "drug_name": "프레드니솔론",
+    "generic_name": "프레드니솔론",
+    "usage": "염증, 알레르기, 자가면역질환",
+    "caution": "감염 위험, 혈당 상승, 장기 복용 시 부신억제",
+    "dosage": "의사 처방에 따라 개별 조절"
+  },
+  {
+    "drug_name": "덱사메타손",
+    "generic_name": "덱사메타손",
+    "usage": "심한 염증, 알레르기, 뇌부종",
+    "caution": "면역억제 주의, 혈당 모니터링",
+    "dosage": "의사 처방에 따라 개별 조절"
+  },
+  {
+    "drug_name": "세르트랄린",
+    "generic_name": "세르트랄린염산염",
+    "usage": "우울증, 불안장애, 강박장애",
+    "caution": "18세 미만 자살 충동 주의, MAO 억제제와 병용 금지",
+    "dosage": "1일 1회 50-200mg"
+  },
+  {
+    "drug_name": "졸로프트",
+    "generic_name": "세르트랄린염산염",
+    "usage": "우울증, 공황장애",
+    "caution": "초기 자살충동 모니터링",
+    "dosage": "1일 1회 50-200mg"
+  },
+  {
+    "drug_name": "에스시탈로프람",
+    "generic_name": "에스시탈로프람옥살산염",
+    "usage": "우울증, 범불안장애",
+    "caution": "QT 연장 주의, 노인 저용량",
+    "dosage": "1일 1회 10-20mg"
+  },
+  {
+    "drug_name": "알프라졸람",
+    "generic_name": "알프라졸람",
+    "usage": "불안장애, 공황장애",
+    "caution": "의존성, 졸음, 갑자기 중단 금지, 운전 주의",
+    "dosage": "1일 3회 0.25-0.5mg"
+  },
+  {
+    "drug_name": "졸피뎀",
+    "generic_name": "졸피뎀타르트산염",
+    "usage": "불면증",
+    "caution": "의존성, 복용 후 즉시 취침, 음주 금지, 장기 복용 주의",
+    "dosage": "취침 직전 10mg (노인 5mg)"
+  },
+  {
+    "drug_name": "가바펜틴",
+    "generic_name": "가바펜틴",
+    "usage": "간질, 신경병성 통증",
+    "caution": "졸음, 어지럼증, 신장 기능에 따른 용량 조절",
+    "dosage": "1일 3회 300-1200mg"
+  },
+  {
+    "drug_name": "독사조신",
+    "generic_name": "독사조신메실산염",
+    "usage": "고혈압, 전립선비대증",
+    "caution": "기립성 저혈압 주의, 취침 전 복용 권장",
+    "dosage": "1일 1회 1-8mg"
+  },
+  {
+    "drug_name": "탐수로신",
+    "generic_name": "탐수로신염산염",
+    "usage": "전립선비대증으로 인한 배뇨 장애",
+    "caution": "기립성 저혈압, 백내장 수술 전 알림 필요",
+    "dosage": "1일 1회 0.2-0.4mg, 식후"
+  },
+  {
+    "drug_name": "알로푸리놀",
+    "generic_name": "알로푸리놀",
+    "usage": "통풍, 고요산혈증",
+    "caution": "초기 통풍 발작 유발 가능, 충분한 수분 섭취, 피부 발진 주의",
+    "dosage": "1일 100-300mg"
+  },
+  {
+    "drug_name": "콜히친",
+    "generic_name": "콜히친",
+    "usage": "통풍 발작 치료 및 예방",
+    "caution": "신장/간 기능 저하 시 감량, 설사 주의",
+    "dosage": "급성: 초회 1mg 후 0.5mg, 예방: 0.5mg 1일 1-2회"
+  }
+]

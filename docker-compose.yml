@@ -10,10 +10,11 @@ services:
     environment:
       - NODE_ENV=production
 
-  # backend placeholder — Sprint 2에서 구현 예정
-  # backend:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/backend/Dockerfile.prod
-  #   ports:
-  #     - "8000:8000"
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile.prod
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
