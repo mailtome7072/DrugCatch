@@ -37,10 +37,11 @@
 ---
 
 ## 4. 기술 스택
-- **Frontend:** Next.js, TailwindCSS
-- **Backend:** Python (FastAPI)
+- **Frontend:** Next.js 15, TailwindCSS 4
+- **Backend:** Python 3.11 (FastAPI)
 - **OCR/이미지 처리:** Tesseract OCR, OpenCV (휴리스틱 이미지 유형 판별)
-- **약품 데이터:** 정적 JSON (50개+, DB 없음)
+- **약품 식별:** Claude Vision API (claude-haiku-4-5) — 알약 직접 촬영 이미지 분석
+- **약품 데이터:** 정적 JSON (50개+) + 식약처 공공 API (의약품 개요 정보)
 - **CI/CD:** GitHub Actions (무료 티어 활용)
 - **Infra:** AWS Lightsail (Docker Compose 배포)
 
@@ -56,11 +57,13 @@ Frontend (Next.js) — localhost:3000
 Backend API (FastAPI) — localhost:8000
 │
 ├── 이미지 유형 판별 (OpenCV 휴리스틱)
-├── OCR 모듈 (Tesseract kor+eng)
-├── 약품명 매칭 (정규표현식)
 │
-▼
-정적 약품 데이터 (backend/data/drugs.json, 50개+)
+├── [처방전/약봉투] OCR (Tesseract kor+eng)
+│     ├── 약품명 매칭 (정적 JSON)
+│     └── 미매칭 후보 → 식약처 의약품 개요 API
+│
+└── [알약 직접 촬영] Claude Vision API (haiku)
+      └── 추출된 약품명 → 식약처 의약품 개요 API
 │
 ▼
 결과 반환 (image_type → extracted_text → drugs 카드)

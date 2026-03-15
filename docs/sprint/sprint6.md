@@ -91,7 +91,6 @@ packaged_drug/unknown → identify_drugs_from_image() → fetch_drug_info()
 - **ANTHROPIC_API_KEY 필수**: 키 미설정 시 알약 직접 촬영 이미지에서 약품 0건 반환 (graceful fallback)
 - **API 호출 비용**: Haiku 모델 기준 이미지 1장당 약 $0.0008 이하 (요청당 비용 발생)
 - **응답 지연**: Claude API 호출로 인해 처방전 이미지 대비 응답 시간 증가 가능 (프론트엔드 로딩 인디케이터 이미 구현됨)
-- **`import re` 위치**: `vision_identifier.py` 내 루프 안에서 import — 동작에는 무관하나 추후 최상단 이동 권장 (코드 리뷰 Medium 이슈)
 - **`vision_identifier.py` 단위 테스트 없음**: 외부 API 의존으로 mock 없이 테스트 어려움 — 추후 Sprint에서 mock 기반 단위 테스트 추가 권장
 
 ---

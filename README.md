@@ -10,8 +10,8 @@
 
 ```
 DrugCatch/
-├── frontend/                   # Next.js 프론트엔드 (Sprint 1~2)
-├── backend/                    # Python 백엔드 - OCR/이미지 인식 (Sprint 3~4)
+├── frontend/                   # Next.js 프론트엔드 (Sprint 1~2, 4)
+├── backend/                    # Python 백엔드 - OCR/이미지 인식/Vision API (Sprint 3~6)
 ├── .claude/
 │   ├── agents/             # Claude 에이전트 정의
 │   │   ├── sprint-planner.md   # 스프린트 계획 수립 에이전트
@@ -141,7 +141,19 @@ PRD(제품 요구사항 문서)를 분석하여 Agile/스크럼 방법론에 기
 4. `.github/workflows/deploy.yml`에서 이미지명 플레이스홀더 (`YOUR_GITHUB_ORG`, `YOUR_PROJECT`) 를 변경합니다.
 5. GitHub Secrets 설정 (`LIGHTSAIL_SSH_KEY`, `LIGHTSAIL_HOST`, 등)
 
-### 2. CLAUDE.md 커스터마이징
+### 2. 환경변수 설정
+
+`backend/.env` 파일을 생성하고 아래 값을 입력합니다 (`.gitignore` 적용됨):
+
+```env
+DRUG_API_KEY=<식약처 공공데이터포털 API 키>
+ANTHROPIC_API_KEY=<Anthropic API 키 (sk-ant-api03-...)>
+```
+
+- `DRUG_API_KEY`: [공공데이터포털](https://www.data.go.kr)에서 `의약품 개요 정보 조회` 서비스 신청
+- `ANTHROPIC_API_KEY`: [console.anthropic.com](https://console.anthropic.com)에서 발급. 미설정 시 알약 직접 촬영 이미지에서 약품 식별이 작동하지 않으며 오류는 발생하지 않음.
+
+### 3. CLAUDE.md 커스터마이징
 
 CLAUDE.md는 Claude Code가 이 프로젝트에서 작동하는 방식을 정의합니다:
 - **언어 규칙**: 한국어 응답, 코드 주석, 커밋 메시지
@@ -149,7 +161,7 @@ CLAUDE.md는 Claude Code가 이 프로젝트에서 작동하는 방식을 정의
 - **의사결정 기준**: Hotfix vs Sprint 자동 분류
 - **Notion 연동**: 문서 관리 규칙 (선택사항)
 
-### 3. 에이전트 메모리
+### 4. 에이전트 메모리
 
 `.claude/agent-memory/` 디렉토리의 `MEMORY.md` 파일들은 에이전트가 세션 간 지식을 축적하는 데 사용됩니다. 이 파일들은 버전 관리되므로 팀 전체가 공유합니다.
 

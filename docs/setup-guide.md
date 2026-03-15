@@ -24,18 +24,20 @@ cd DrugCatch
 
 ## 3. 환경변수 설정
 
+`backend/.env` 파일을 직접 생성합니다 (`.gitignore` 적용 — git에 올라가지 않음):
+
 ```bash
-# .env.example을 복사하여 .env 파일 생성
-cp .env.example .env
+# backend/.env
+DRUG_API_KEY=<식약처 API 키>
+ANTHROPIC_API_KEY=<Anthropic API 키>
 ```
 
-`.env` 파일을 열고 필요한 값을 입력합니다:
+| 환경변수 | 필수 여부 | 설명 | 발급처 |
+|----------|-----------|------|--------|
+| `DRUG_API_KEY` | 필수 | 식약처 의약품 개요 정보 API 키 | [공공데이터포털](https://www.data.go.kr) — `DrbEasyDrugInfoService` 신청 |
+| `ANTHROPIC_API_KEY` | 선택 | Claude Vision API 키 (알약 직접 촬영 이미지 분석) | [console.anthropic.com](https://console.anthropic.com) — `sk-ant-api03-...` 형식 |
 
-| 환경변수 | 설명 | 예시 |
-|----------|------|------|
-| `NEXT_PUBLIC_API_URL` | 프론트엔드에서 호출하는 백엔드 API URL | `http://localhost:8000` |
-| `JWT_SECRET` | JWT 서명 키 (로컬 개발 시 임의 문자열 사용 가능) | `dev-secret-key` |
-| `SECRET_KEY` | 앱 시크릿 키 (로컬 개발 시 임의 문자열 사용 가능) | `dev-app-secret` |
+> `ANTHROPIC_API_KEY` 미설정 시 처방전/약봉투 분석은 정상 동작하며, 알약 직접 촬영 이미지에서만 약품 0건 반환됩니다.
 
 ---
 
@@ -86,10 +88,18 @@ npm run dev
 
 ## 5. 외부 서비스 설정
 
-MVP 단계에서는 DB 없이 정적 JSON 또는 공공 API를 활용합니다.
-별도의 외부 서비스 설정은 불필요합니다.
+### 식약처 공공데이터 API
 
-> 공공 API 연동 시 별도 API 키가 필요할 수 있습니다. 해당 시점에 이 섹션을 업데이트합니다.
+1. [공공데이터포털](https://www.data.go.kr) 회원가입
+2. `의약품 개요정보 조회 서비스 (DrbEasyDrugInfoService)` 검색 후 활용 신청
+3. 승인 후 발급된 서비스 키를 `backend/.env`의 `DRUG_API_KEY`에 입력
+4. 승인까지 보통 1~2 영업일 소요
+
+### Anthropic API (Claude Vision)
+
+1. [console.anthropic.com](https://console.anthropic.com) 에서 API 키 발급
+2. `sk-ant-api03-...` 형식의 키를 `backend/.env`의 `ANTHROPIC_API_KEY`에 입력
+3. 알약 직접 촬영 이미지 분석에만 사용됨. 미설정 시 해당 기능만 비활성화됨.
 
 ---
 
