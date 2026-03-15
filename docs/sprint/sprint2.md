@@ -303,3 +303,26 @@ Sprint 2 완료 후 Sprint 3에서 다음을 이어받습니다:
 - `AnalysisResult` 타입을 백엔드 응답 스펙에 맞게 구체화
 - 분석 완료 후 결과 페이지(`/result`)로 라우팅 연결 (Sprint 4)
 - 백엔드 Python OCR 모듈 구현 (Tesseract OCR, OpenCV)
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- `analyzeImage` 함수를 stub으로 먼저 구현(`lib/api.ts`)하고 실 연동은 Sprint 3에 위임하는 계약 우선 설계(contract-first) 방식이 Sprint 3 연동 시 충돌 없이 교체를 가능하게 했다.
+- `URL.createObjectURL`의 메모리 누수 가능성을 사전에 식별하고 `useEffect` cleanup에서 `URL.revokeObjectURL`을 호출하는 방식으로 처음부터 올바르게 처리했다.
+- 카메라(`getUserMedia`) 권한 거부, 미지원 브라우저, HEIC 형식 불완전 지원 등 엣지 케이스를 계획 단계에서 식별하여 에러 처리 분기를 명시적으로 구현했다.
+- 파일 선택과 카메라 촬영을 탭 UI로 분리하고 `inputMode` 단일 상태로 제어하여 컴포넌트 복잡도를 낮게 유지했다.
+
+### 문제점 (Problem)
+- `NEXT_PUBLIC_API_URL` 환경변수가 Sprint 2에서는 실제로 사용되지 않고 Sprint 3에서 처음 의미를 갖게 되는데, 이를 stub 단계에서 하드코딩 없이 준비해두는 작업이 누락되었다.
+- 카메라 스트림(`MediaStream`) 종료 처리가 컴포넌트 언마운트 시에도 필요한데, `useEffect` cleanup에서 `stream.getTracks().forEach(t => t.stop())` 호출이 계획에만 있고 실제 구현 여부 검증이 수동에 의존했다.
+- 10MB 파일 크기 제한 검사가 클라이언트에서만 이루어지고, 백엔드에서 동일한 검사가 Sprint 3에서 별도로 구현되어 중복 로직이 발생했다.
+
+### 개선 방향 (Try)
+- stub 함수가 실제 환경변수를 참조하도록 처음부터 `process.env.NEXT_PUBLIC_API_URL`을 사용하여 Sprint 3 교체 시 변경 범위를 최소화한다.
+- 카메라 스트림 해제 로직을 `useEffect` 의존성 배열에 명시하고, E2E 테스트(Sprint 8)에서 카메라 mock을 통해 스트림 해제 여부를 자동 검증한다.
+
+### 핵심 학습 (Key Learnings)
+- `<input type="file">` visually hidden 처리 + `useRef`를 통한 클릭 트리거 패턴은 접근성과 커스텀 디자인을 동시에 충족하는 표준 방식임을 확인했다.
+- `AnalysisResult.data: unknown`으로 선언하고 Sprint 3에서 실제 타입으로 교체하는 점진적 타입 구체화 전략이 TypeScript 타입 안전성을 유지하면서 사전 계획 없이 개발할 수 있는 유연성을 제공한다는 점을 학습했다.

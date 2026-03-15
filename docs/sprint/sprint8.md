@@ -528,3 +528,29 @@ PR 코멘트에 Lighthouse 리포트 링크가 자동 추가된다.
 - Lighthouse CI: `@lhci/cli` 0.14.x, `temporary-public-storage` 업로드
 - 백엔드 의존성 없음 — 모든 테스트에서 API mock 사용
 - 기존 백엔드 단위 테스트(`pytest backend/tests/ -v`) 영향 없음
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- 단위/컴포넌트/E2E/성능 네 계층의 테스트를 한 스프린트에 체계적으로 도입하여 이후 스프린트의 회귀 탐지 기반을 마련했다.
+- `URL.createObjectURL`의 jsdom 미지원 문제를 `jest.setup.ts`에서 전역 mock으로 해결한 패턴이 명확하게 기록되어 향후 동일 이슈 발생 시 재사용 가능한 해결책이 되었다.
+- Playwright `page.route()`를 활용한 API mock 전략으로 백엔드 없이도 프론트엔드 전체 플로우(업로드 → 분석 → 결과)를 자동화 검증할 수 있게 되었다.
+- `inferDiseases` 순수 함수에 대한 7개 단위 테스트가 mock 없이 간단하게 작성되어, 순수 함수 설계의 테스트 용이성을 실증했다.
+- 26개 단위/컴포넌트 테스트가 0.712초에 통과하여 개발 루프에서 부담 없이 실행 가능한 수준을 유지했다.
+
+### 문제점 (Problem)
+- `npm run test:e2e` 로컬 검증과 `npx lhci autorun` 로컬 검증이 수동 검증 항목으로 남겨졌다. 검증 기록이 ⬜로 표시되어 실제 동작 여부를 객관적으로 증명하지 못했다. 이것이 Sprint 10의 직접적 원인이 되었다.
+- Lighthouse CI `temporary-public-storage` 업로드 결과의 TTL이 짧아 리포트 링크가 만료된다. 중요한 성능 측정 결과가 문서에 기록되지 않고 소실되었다.
+- `getUserMedia` 카메라 관련 테스트를 의도적으로 제외했는데, 실제 카메라 기능이 핵심 입력 방식 중 하나임을 고려하면 기본 동작(탭 클릭 시 권한 요청 UI 표시)은 mock으로 검증할 수 있었다.
+- React 19 + Next.js 16 환경에서 `act()` 관련 경고 발생 가능성이 예상 리스크로 식별되었으나, 실제 발생 여부와 해결 방법이 검증 결과에 기록되지 않았다.
+
+### 개선 방향 (Try)
+- E2E 테스트와 Lighthouse CI 실행 결과를 스프린트 완료 시 문서에 반드시 기록한다(스크린샷, 점수 수치 포함). Sprint 10에서 이 과제를 자동화 검증으로 해결했다.
+- Lighthouse CI 결과를 `docs/sprint/sprint8/` 디렉토리에 스크린샷으로 아카이빙하여 TTL 만료 후에도 증거를 보존한다.
+- `getUserMedia` 관련 테스트를 `jest.fn().mockResolvedValue(mockStream)` 방식으로 단위 테스트 수준에서 추가한다.
+
+### 핵심 학습 (Key Learnings)
+- Next.js의 `createJestConfig` 헬퍼를 사용하면 `next/navigation`, `next/image` 등의 자동 mock와 SWC 트랜스파일이 활성화되어 Jest 설정 복잡도가 크게 줄어든다. Next.js 프로젝트에서 Jest를 직접 설정하는 것보다 훨씬 효율적이다.
+- Playwright의 `page.addInitScript()`를 통한 `sessionStorage` 사전 주입 방식은 서버 사이드 렌더링이 완료되기 전에 브라우저 상태를 설정할 수 있어, 상태 기반 UI 테스트에서 필수적인 기법이다.

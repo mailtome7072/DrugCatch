@@ -461,3 +461,26 @@ Sprint 3 완료 후 Sprint 4에서 다음을 이어받습니다:
 - 분석 완료 후 `/result` 라우팅 추가 (현재 `UploadPage.tsx`에서 콘솔 로그만 출력 중)
 - 결과 화면 레이아웃: 최상단 유추 병명 → 중간 증상 → 하단 약품 카드 리스트
 - `warnings` 배열을 활용한 약물 주의사항 표시
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- FastAPI + Pydantic으로 API 응답 스펙(`AnalysisResult`, `AnalysisData`, `DrugInfo`)을 Sprint 3에서 확정하여 Sprint 4가 타입 변경 없이 결과 화면을 구현할 수 있었다.
+- `pytest.mark.skipif`를 활용한 Tesseract 조건부 스킵 전략이 효과적이었다. CI 환경에서 Tesseract 미설치 상태에서도 전체 테스트가 통과하여 파이프라인 안정성을 유지했다.
+- `drugs.json` 정적 데이터를 앱 시작 시 1회 메모리 캐시하는 방식으로 매 요청마다 파일 I/O를 방지했다. 이 패턴은 Sprint 4의 LRU 캐시 전략과 일관성을 유지했다.
+- CORS 미들웨어를 `localhost:3000` 명시 허용으로 설정하여 로컬 개발 환경에서 프론트-백 통합 테스트가 즉시 가능했다.
+
+### 문제점 (Problem)
+- 공공 의약품 DB API 연동이 MVP 범위 초과로 판단되어 정적 JSON으로 대체했으나, Sprint 4에서 식약처 API 연동이 추가되면서 Sprint 3의 판단이 과도하게 보수적이었음이 드러났다.
+- OCR 인식률이 Tesseract 한국어 한계로 낮을 것으로 예측했으나, 실제 이미지 전처리 파라미터(흑백 변환 임계값, 대비 강화 수준)에 대한 실험적 검증 없이 기본값을 적용했다.
+- `drugs.json`에 50개 이상의 약품 데이터를 수동으로 구축하는 작업이 30분 예상보다 오래 걸렸고, 약품명 표기 불일치(한글 상품명 vs 성분명)로 인한 OCR 매칭 실패가 Sprint 4 이후에도 계속 보완 작업이 필요했다.
+
+### 개선 방향 (Try)
+- 이미지 전처리 파라미터(DPI 배율, Otsu 이진화 임계값 등)를 환경변수로 외부화하여 실험 없이 배포 후에도 조정 가능하도록 한다.
+- 약품 데이터 JSON을 처음부터 식약처 API 응답 필드명(`itemName`, `efcyQesitm` 등)과 매핑 테이블을 유지하여 Sprint 4의 API 연동 시 변환 로직을 최소화한다.
+
+### 핵심 학습 (Key Learnings)
+- FastAPI의 `UploadFile`을 사용할 때 파일 내용을 `await file.read()`로 읽은 후 `io.BytesIO`로 감싸야 OpenCV/Pillow에서 처리할 수 있다는 점을 확인했다.
+- 백엔드 API 응답 스펙을 Pydantic 모델로 명시적으로 정의하면 프론트엔드 TypeScript 타입과의 동기화가 용이하다. 향후 API 스펙 변경 시 Pydantic 모델 수정만으로 응답 형태가 보장된다는 장점을 실감했다.

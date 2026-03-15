@@ -117,3 +117,28 @@ OCR 파이프라인 후 낱알 파이프라인을 순차 실행하여 결과를 
 | `f3d62c4` | 낱알식별 API v01→v03 전환, `print_front` 기반 검색 로직으로 변경, 후처리 필터 추가 |
 
 수동 검증 항목: `deploy.md` 참조
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- 식약처 낱알식별 API v01 폐지 문제를 v03 마이그레이션으로 신속하게 대응했다. v03의 파라미터 제한(shape/color 필터 미지원)을 발견하고 `print_front` 기반 검색 + 후처리 필터로 우회하는 창의적 해결책을 시도했다.
+- `identify_pills` 파이프라인에서 모든 외부 호출 예외를 `try/except`로 감싸고 빈 리스트를 반환하는 graceful fallback 패턴이 Sprint 6 Vision API 교체 시에도 동일하게 적용되었다.
+- `_pill_cache` 모듈 레벨 딕셔너리로 동일 특징 조합의 API 재조회를 방지한 캐싱 전략이 `lru_cache`보다 유연했다(mutable 파라미터 허용).
+- contour 최대 10개, 면적 500 미만 필터를 통해 대형 이미지의 과다 처리를 방지했다.
+
+### 문제점 (Problem)
+- 식약처 낱알식별 API v03가 `print_front`/`drug_shape`/`color_class1` 등 핵심 파라미터를 지원하지 않는다는 사실을 API 문서가 아닌 실제 호출 실험에서 발견했다. 사전 API 스펙 검토 단계가 부재했다.
+- v01 API가 영구 중단되고 v02는 404, v03은 파라미터 미지원 상태로 전체 식약처 낱알식별 API 계열이 사실상 사용 불가 상태였다. 이는 Sprint 5 전체 방향성이 잘못 설정된 핵심 원인이었다.
+- `pill_identifier.py`의 `identify_pills`, `_classify_shape`, `_extract_dominant_colors`에 대한 단위 테스트가 작성되지 않았다. Sprint 7에서 소급 추가가 필요했다.
+- `_pill_cache`가 프로세스 수명 동안 무한 성장 가능한 구조였다. LRU 방식의 크기 제한 미적용이 코드 리뷰에서 Medium 이슈로 지적되었다.
+
+### 개선 방향 (Try)
+- 공공 API를 사용하기 전에 반드시 공식 문서 + Postman/curl 직접 호출로 지원 파라미터를 검증하는 단계를 계획에 포함한다.
+- 외부 API 의존 기능은 처음부터 fallback 경로를 설계한다. Sprint 5처럼 API가 폐지/변경될 경우를 대비한 Plan B를 스프린트 계획 단계에서 명시한다.
+- 캐시 자료구조는 `collections.OrderedDict` 또는 `functools.lru_cache` 방식으로 크기 제한을 두어 메모리 누수를 방지한다.
+
+### 핵심 학습 (Key Learnings)
+- 정부 공공 API는 버전 관리가 불규칙하고 폐지 공지 없이 중단되는 경우가 있다. 특히 식약처 낱알식별 API v01 중단 사례는 외부 API 의존성의 리스크를 직접 체험한 사례였다.
+- OpenCV contour 기반 알약 감지는 배경 색상, 조명, 이미지 품질에 극히 민감하여 실제 사용자 환경에서 신뢰할 수 있는 결과를 내기 어렵다는 점을 확인했다. 이것이 Sprint 6에서 Claude Vision API로 전환한 근본 이유였다.

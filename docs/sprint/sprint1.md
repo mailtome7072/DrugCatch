@@ -228,3 +228,27 @@ Sprint 1 완료 후 Sprint 2에서 다음을 이어받습니다:
 - 이미지 입력 방식 선택 UI (촬영 vs 업로드)
 - 이미지 미리보기 컴포넌트
 - "이미지 분석 시작" 버튼 및 로딩 인디케이터
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- Next.js 15 + TailwindCSS 4 공식 `create-next-app` 템플릿을 사용하여 설정 충돌 없이 초기화에 성공했다.
+- `output: 'standalone'` 설정과 멀티 스테이지 Docker 빌드를 처음부터 올바르게 구성하여 이후 스프린트 CI 통과의 기반을 마련했다.
+- 동의 체크박스 상태와 버튼 활성화 로직을 `useState` 훅으로 간결하게 구현하여 Sprint 2 상태 관리 패턴의 기준이 되었다.
+- 모바일 우선(max-w-md, 중앙 정렬) 레이아웃 원칙을 Sprint 1부터 적용하여 이후 전체 화면에서 일관성을 유지했다.
+
+### 문제점 (Problem)
+- `frontend/.gitkeep` 파일 충돌 가능성이 리스크로 식별되었으나, 초기화 전 삭제를 명시적으로 계획에 포함해야 했다.
+- Docker `docker-compose.yml`의 backend 서비스가 placeholder 상태로 남아 있어 Sprint 3까지 실제 통합 테스트가 불가능했다.
+- CI 자동 검증 항목이 Docker 빌드 성공 여부에 한정되어, UI 동작(체크박스 활성화, 라우팅)은 수동 확인에 의존했다.
+
+### 개선 방향 (Try)
+- 향후 스프린트 초기화 시 기존 placeholder 파일(.gitkeep 등) 정리 단계를 태스크 목록 최상단에 명시한다.
+- Docker Compose 전체 스택 기동 검증을 Sprint 1 완료 기준에 포함하여 초기부터 통합 환경을 확인한다.
+- 동의 페이지처럼 단순한 UI 컴포넌트도 Playwright 기반 E2E 스모크 테스트를 Sprint 8 이후 소급 추가한다.
+
+### 핵심 학습 (Key Learnings)
+- Next.js App Router에서 서버 컴포넌트와 클라이언트 컴포넌트(`'use client'`)를 분리하는 패턴을 정립했다. 이 패턴(서버 컴포넌트 shell + 클라이언트 컴포넌트 import)은 Sprint 2~4에서도 동일하게 적용되었다.
+- 멀티 스테이지 Docker 빌드(`deps → builder → runtime`)를 구성하면서 Next.js standalone 출력 시 `public/`과 `.next/static/` 디렉토리를 별도로 복사해야 한다는 점을 확인했다.

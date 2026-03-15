@@ -119,3 +119,29 @@ packaged_drug/unknown → identify_drugs_from_image() → fetch_drug_info()
 - ⬜ 알약 이미지 업로드 후 Vision API 결과 카드 표시 확인 (`ANTHROPIC_API_KEY` 설정 후)
 - ⬜ `ANTHROPIC_API_KEY` 미설정 환경에서 graceful fallback 동작 확인
 - ⬜ UI 디자인 시각적 품질 확인 (모바일 375px 포함)
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- Sprint 5의 실패(식약처 낱알식별 API 폐지)에 빠르게 대응하여 Claude Vision API라는 대안을 찾고 같은 날 구현을 완료했다. 장애 대응 속도가 빨랐다.
+- `ANTHROPIC_API_KEY` 미설정 환경에서 빈 리스트를 반환하는 graceful fallback 설계가 Sprint 7 단위 테스트에서 T1-1 케이스로 그대로 활용되었다.
+- 줄 단위 텍스트 파싱 방식(JSON 강제 지양)을 선택하여 Claude API 응답이 JSON 형식이 아닐 때 파싱 오류가 발생하지 않도록 처리했다.
+- `claude-haiku-4-5` 모델 선택이 응답 속도와 비용 측면에서 알약 이미지 분석에 적합했다. 이미지 1장당 $0.0008 이하의 비용은 MVP 운영에 현실적이었다.
+- `libgl1-mesa-glx` → `libgl1` Docker 빌드 오류를 Debian trixie 호환 패키지로 수정하여 CI 빌드 블로커를 해소했다.
+
+### 문제점 (Problem)
+- `vision_identifier.py` 내 루프 안에서 `import re`를 호출하는 코드 스타일 문제가 코드 리뷰에서 발견되었다. 기능상 문제는 없으나 Python 관례 위반이었다.
+- Claude Vision API가 한국 식약처 DB에 없는 외국 약품을 반환하는 경우 `matched=False`로만 표시되어 사용자에게 "식별은 했으나 DB 미등록" 상태를 명확히 전달하지 못했다.
+- `vision_identifier.py` 단위 테스트가 외부 API 의존성 때문에 Sprint 6에서 작성되지 않았고 Sprint 7에서 mock 기반으로 소급 추가해야 했다.
+- `pill_identifier.py`를 삭제하지 않고 유지(재활용 가능성)한 결정이 코드베이스에 사용되지 않는 모듈을 남겼다.
+
+### 개선 방향 (Try)
+- 외부 API 의존 서비스 모듈을 작성할 때 mock 기반 단위 테스트를 같은 스프린트 내에 함께 작성한다.
+- Claude API 응답에서 `matched=False` 결과를 사용자에게 "AI가 식별했으나 국내 DB 미등록" 메시지로 명확히 구분하여 표시하는 UI 개선을 다음 스프린트에 반영한다.
+- `import` 문은 항상 파일 최상단에 배치하는 Python 관례(PEP 8)를 린터(flake8/ruff)로 자동 강제한다.
+
+### 핵심 학습 (Key Learnings)
+- Claude Vision API의 멀티모달 이미지 이해 능력은 낮은 화질이나 각도 변형에서도 알약 식별문자를 인식할 수 있어, OpenCV contour + pytesseract 조합보다 알약 이미지 분석에 훨씬 효과적이었다.
+- 외부 API 기반 기능을 구현할 때 "API 키 미설정 → graceful fallback" 패턴을 처음부터 설계하면, 다양한 배포 환경(키 없는 테스트 환경, 키 있는 프로덕션 환경)에서 동일한 코드가 안정적으로 동작한다는 것을 실증했다.

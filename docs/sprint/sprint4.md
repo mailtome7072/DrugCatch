@@ -113,3 +113,27 @@
 - ✅ Playwright UI 검증 미수행 — 수동 검증 항목으로 이관
 
 수동 검증 항목: `deploy.md` 참조
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- `inferDiseases.ts`에서 `usage` 키워드 → 질환 카테고리 변환 로직을 독립 모듈로 분리하여 `ResultPage`에서 재사용하고, Sprint 8에서 단위 테스트를 쉽게 추가할 수 있는 구조를 만들었다.
+- `sessionStorage`를 통한 분석 결과 전달 방식이 단순하면서도 새로고침 대응, 직접 접근 방어(`/result` → `/upload` 리다이렉트)를 자연스럽게 처리했다.
+- `fetch_drug_info`에 `@lru_cache(maxsize=256)`을 적용하여 동일 약품명의 반복 API 호출을 방지한 것은 실제 운영 환경에서도 유효한 최적화였다.
+- `DRUG_API_KEY`를 `python-dotenv`로 관리하고 Docker Compose에 `env_file`로 주입하는 방식이 Sprint 9 배포 문서화 작업에서 그대로 재사용되었다.
+
+### 문제점 (Problem)
+- `inferDiseases.ts`와 `drug_lookup.py`의 개선 로직에 대한 단위 테스트가 Sprint 4에서 작성되지 않았다. 코드 리뷰에서 Medium 이슈로 지적되었고, Sprint 7~8에서 소급하여 추가해야 했다.
+- 식약처 API의 응답 속도가 불안정하여 분석 요청 전체 응답 시간이 길어지는 경우가 발생했다. `lru_cache`가 캐시 히트 시에만 효과적이고 첫 호출은 여전히 느렸다.
+- 미매칭 약품(`matched=false`)을 결과 화면에서 완전히 숨기는 결정은 사용자가 OCR이 감지했으나 식약처 DB에 없는 약품 정보를 전혀 확인할 수 없다는 UX 문제를 만들었다.
+
+### 개선 방향 (Try)
+- 핵심 유틸 함수(`inferDiseases`, `extract_unmatched_names`)에 대한 단위 테스트를 기능 구현 직후, 같은 스프린트 내에 작성한다.
+- 식약처 API 호출에 타임아웃(5초)과 재시도(1회) 로직을 추가하여 네트워크 불안정 시 전체 분석이 실패하지 않도록 한다.
+- `matched=false` 약품도 "추가 확인 필요" 섹션으로 별도 표시하여 사용자가 OCR 감지 결과를 참고할 수 있도록 개선한다.
+
+### 핵심 학습 (Key Learnings)
+- App Router에서 `metadata` export는 서버 컴포넌트에서만 가능하며, 클라이언트 컴포넌트를 별도 파일(`components/ResultPage.tsx`)로 분리하는 패턴이 필수라는 것을 Sprint 1~4에 걸쳐 반복 확인했다.
+- `sessionStorage`는 탭 간 데이터 공유가 불가하고 새로고침 후에도 유지된다는 특성 때문에 분석 결과 임시 저장에 적합하지만, 분석 완료 후 `sessionStorage`를 명시적으로 삭제하지 않으면 이전 결과가 잔류할 수 있다는 점을 확인했다.

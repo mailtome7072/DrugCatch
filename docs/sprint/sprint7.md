@@ -262,3 +262,27 @@ pytest backend/tests/ -v
 - 테스트 실행 환경: Python 3.11, pytest, numpy (기존 설치)
 - mock 도구: `unittest.mock` (표준 라이브러리)
 - CI에서 `DRUG_API_KEY`, `ANTHROPIC_API_KEY` 없이도 전체 통과해야 함
+
+---
+
+## 회고 (Retrospective)
+
+### 잘 된 점 (Keep)
+- `unittest.mock` 표준 라이브러리만으로 `anthropic`, `httpx`, `cv2` 등 외부 의존성을 완전히 격리하여 추가 pip 패키지 없이 40개 테스트를 구성했다. CI 환경에서 `DRUG_API_KEY`, `ANTHROPIC_API_KEY` 없이도 전체 통과했다.
+- `@lru_cache` 데코레이터가 있는 함수(`fetch_drug_info`)의 테스트 간 캐시 오염 문제를 `cache_clear()` 호출로 해결한 패턴이 명확하게 문서화되어 재사용 가능한 레퍼런스가 되었다.
+- `numpy.zeros`로 합성 BGR 이미지를 생성하고 `cv2.imencode`로 bytes 변환하는 fixture 전략이 실제 이미지 파일 없이도 `pill_identifier` 파이프라인 전체를 테스트 가능하게 했다.
+- 40개 테스트가 0.70초에 모두 통과하여 개발 사이클에서 빠른 피드백을 제공했다.
+
+### 문제점 (Problem)
+- `test_pill_identifier.py` Task 2-A의 T2-3(정상 이미지 합성 테스트)에서 합성 검정 배경 이미지에 흰색 원을 그려도 contour 검출이 실패하는 경우가 발생할 수 있어, 테스트가 환경 의존적이 될 위험이 있었다.
+- `test_vision_identifier.py`에서 `anthropic` 모듈이 미설치된 환경의 mock 경로(`app.services.vision_identifier.anthropic`)를 찾는 데 시간이 걸렸다. 모듈이 런타임에 import되는 구조에서 정확한 mock 경로를 파악하는 것이 예상보다 어려웠다.
+- 단위 테스트는 40개 완비되었으나, 전체 파이프라인(`POST /analyze` → OCR → drug_lookup → API 조회)을 검증하는 통합 테스트는 기존 5개(Sprint 3 작성)에서 업데이트되지 않았다.
+
+### 개선 방향 (Try)
+- 합성 이미지 fixture를 별도 `conftest.py`에 정의하여 테스트 파일 간 재사용 가능하도록 한다.
+- 외부 API 의존 모듈을 작성할 때 mock 경로를 주석으로 명시(`# mock 경로: app.services.vision_identifier.anthropic`)하여 테스트 작성 시 참조 비용을 줄인다.
+- Sprint 4~6에서 추가된 기능(식약처 API, Claude Vision API 파이프라인)을 커버하는 통합 테스트를 `test_analyze.py`에 추가한다.
+
+### 핵심 학습 (Key Learnings)
+- Python `unittest.mock.patch`의 대상 경로는 "모듈이 사용되는 위치"를 지정해야 한다. `anthropic`이 `vision_identifier.py`에서 import되므로 mock 경로는 `app.services.vision_identifier.anthropic`이 되어야 하며, `anthropic` 패키지 자체를 mock하면 효과가 없다.
+- `@lru_cache`와 모듈 레벨 딕셔너리 캐시는 테스트 간 상태를 공유한다. 각 테스트 실행 전 `cache_clear()`와 `.clear()`를 호출하는 것은 테스트 격리의 필수 원칙임을 재확인했다.
