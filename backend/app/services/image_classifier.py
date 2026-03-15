@@ -39,8 +39,8 @@ def classify_image(image_bytes: bytes) -> Literal["prescription", "packaged_drug
     elif color_std > 40 and text_density > 0.02:
         # 색상 다양 + 중간 텍스트 밀도 → 포장 약품
         return "packaged_drug"
-    elif white_ratio > 0.3:
-        # 흰 배경이 어느정도 있으면 처방전으로 fallback
+    elif white_ratio > 0.3 and text_density > 0.03:
+        # 흰 배경 + 어느정도 텍스트 밀도 → 처방전 가능성
         return "prescription"
     else:
         return "unknown"

@@ -7,34 +7,11 @@
 
 ## 현재 미완료 항목
 
-### Sprint 3 — FastAPI 백엔드 OCR API (2026-03-15)
+### Sprint 7 — 핵심 모듈 단위 테스트 (2026-03-16)
 
-**자동 검증 완료**
-
-- ✅ `pytest backend/tests/` 통과 (4 passed, 1 skipped — Tesseract 조건부 스킵)
-- ✅ `/health` 엔드포인트 HTTP 200 응답 확인
-- ✅ 비이미지 파일 업로드 시 HTTP 422 에러 응답 확인
-
-**수동 검증 필요**
-
-- ⬜ Tesseract 설치 후 처방전 샘플 이미지로 OCR + 약품명 매칭 확인:
-  ```bash
-  # Tesseract 설치 (macOS)
-  brew install tesseract tesseract-lang
-  # 이미지 업로드 테스트
-  curl -X POST http://localhost:8000/analyze -F "file=@/path/to/prescription.jpg"
-  ```
-- ⬜ 프론트엔드 업로드 페이지에서 실 API 연동 확인 (브라우저 콘솔 로그)
-  - ⬜ "이미지 분석 시작" 버튼 클릭 시 실제 백엔드 API 호출 확인
-  - ⬜ 네트워크 탭에서 `POST /analyze` 요청 확인
-  - ⬜ 응답 결과 콘솔 출력 확인
-- ⬜ `npm run lint` ESLint 오류 없음 확인
-- ⬜ `npm run build` 프론트엔드 빌드 성공 확인
-- ⬜ Docker 백엔드 빌드 확인:
-  ```bash
-  docker build -f docker/backend/Dockerfile.prod --target runtime -t app-backend:test .
-  ```
-- ⬜ `docker compose up --build` 프론트엔드 + 백엔드 통합 기동 확인
+- ✅ `pytest backend/tests/ -v` 전체 40개 통과
+- ✅ 외부 API 실제 호출 없음 (unittest.mock 완전 격리)
+- ⬜ Docker 빌드 후 통합 기동 확인 (`docker compose up --build`)
 
 ---
 

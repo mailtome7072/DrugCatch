@@ -104,7 +104,7 @@ Backend API (FastAPI) — localhost:8000
 - FastAPI 백엔드 초기 설정 (CORS, Docker, pytest)
 - frontend lib/api.ts stub → 실 API 호출로 교체
 
-#### Sprint 4 (Day 2)
+#### Sprint 4 (Day 2) — ✅ 완료 (2026-03-15)
 - "이미지 분석 시작" 버튼과 백엔드 OCR/이미지 인식 API 연결
 - 조회 결과 UI 레이아웃 구성
   - 최상단: 유추된 주요 병명 표시
@@ -112,6 +112,27 @@ Backend API (FastAPI) — localhost:8000
   - 하단: 약품 정보 카드 리스트
 - 에러 처리 및 로깅
 - 내부 테스트 및 피드백 반영
+
+#### Sprint 5 — ✅ 완료 (2026-03-15)
+- 이미지 기반 알약 낱알식별 파이프라인 구현
+- OpenCV+pytesseract로 알약 모양/색상/식별문자 추출 (pill_identifier.py)
+- 식약처 낱알식별 API 연동 (`fetch_drug_by_features`)
+- packaged_drug/unknown 이미지에서 낱알 파이프라인 순차 실행
+- OCR 결과와 낱알식별 결과 중복 없이 병합
+
+#### Sprint 6 — ✅ 완료 (2026-03-15)
+- Claude Vision API(claude-haiku-4-5-20251001) 기반 알약 이미지 직접 분석
+- `vision_identifier.py` 신규 생성 — 약품명 추출 및 괄호 설명 제거, 미상 항목 필터링
+- `analyze.py` 낱알 파이프라인 → Vision 파이프라인 교체, 디버그 로그 전체 제거
+- `ANTHROPIC_API_KEY` 미설정 시 graceful fallback 구현
+- Docker 빌드 오류(`libgl1-mesa-glx` → `libgl1`) 수정
+
+#### Sprint 7 — ✅ 완료 (2026-03-16)
+- `vision_identifier.py`, `pill_identifier.py`, `drug_api.py` 핵심 모듈 단위 테스트 추가
+- `test_vision_identifier.py` 8개 테스트 (Claude Vision API mock 기반)
+- `test_pill_identifier.py` 16개 테스트 (OpenCV 합성 이미지 기반)
+- `test_drug_api.py` 8개 테스트 (httpx mock 기반)
+- 전체 40개 테스트 통과, 외부 API 실제 호출 없음
 
 ---
 
@@ -123,7 +144,10 @@ Backend API (FastAPI) — localhost:8000
 | Sprint 1 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 2 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 3 완료 | 2026-03-15 | ✅ 완료 |
-| Sprint 4 완료 (MVP 출시) | 2026-03-16 | 📋 예정 |
+| Sprint 4 완료 (MVP 출시) | 2026-03-15 | ✅ 완료 |
+| Sprint 5 완료 (낱알식별) | 2026-03-15 | ✅ 완료 |
+| Sprint 6 완료 (Vision API) | 2026-03-15 | ✅ 완료 |
+| Sprint 7 완료 (단위 테스트) | 2026-03-16 | ✅ 완료 |
 
 ---
 

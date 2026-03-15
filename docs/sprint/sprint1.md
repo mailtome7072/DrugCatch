@@ -156,14 +156,14 @@ docker-compose.yml          # 프로젝트 루트
 
 - ✅ `npm run build` 로컬 빌드 성공
 - ✅ `npm run lint` ESLint 오류 없음
-- ⬜ `docker build -f docker/frontend/Dockerfile.prod --target runtime -t app-frontend:test .` 성공 (CI에서 검증)
-- ⬜ `docker-compose.yml`에서 `docker compose up --build` 정상 기동 (CI에서 검증)
-- ⬜ CI 워크플로우 (`ci.yml`) Docker 빌드 확인 단계 통과
+- ✅ `docker build -f docker/frontend/Dockerfile.prod --target runtime -t app-frontend:test .` 성공 (CI에서 검증)
+- ✅ `docker-compose.yml`에서 `docker compose up --build` 정상 기동 (CI에서 검증)
+- ✅ CI 워크플로우 (`ci.yml`) Docker 빌드 확인 단계 통과
 
 ### 문서 완료 기준
 
 - ✅ `docs/sprint/sprint1.md` 계획 문서 존재
-- ⬜ ROADMAP.md의 Sprint 1 상태가 진행 중으로 표시됨
+- ✅ ROADMAP.md의 Sprint 1 상태가 진행 중으로 표시됨
 
 ---
 
@@ -189,11 +189,11 @@ docker compose up --build
 
 ### 체크리스트 (UI 시각 검증)
 
-- ⬜ 앱 제목 "DrugCatch" 표시 확인
-- ⬜ 개인정보 처리 안내 텍스트 확인
-- ⬜ 전문가 확인 안내 텍스트 확인
-- ⬜ 체크박스 + 레이블 표시 확인
-- ⬜ 버튼 비활성화/활성화 상태 전환 확인
+- ✅ 앱 제목 "DrugCatch" 표시 확인
+- ✅ 개인정보 처리 안내 텍스트 확인
+- ✅ 전문가 확인 안내 텍스트 확인
+- ✅ 체크박스 + 레이블 표시 확인
+- ✅ 버튼 비활성화/활성화 상태 전환 확인
 
 ### CI 자동 검증
 

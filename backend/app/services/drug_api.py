@@ -1,0 +1,161 @@
+from __future__ import annotations
+
+import os
+import re
+from functools import lru_cache
+from typing import List, Optional
+
+import httpx
+
+from app.models.schemas import DrugInfo
+
+API_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList"
+# v01은 중단됨. v03는 item_name 검색만 지원하며 shape/color 응답 필드 포함
+PILL_API_URL = "https://apis.data.go.kr/1471000/MdcinGrnIdntfcInfoService03/getMdcinGrnIdntfcInfoList03"
+
+# 낱알식별 API 결과 캐시 (파라미터 key → List[DrugInfo])
+_pill_cache: dict = {}
+
+
+def _get_api_key() -> str:
+    key = os.environ.get("DRUG_API_KEY", "")
+    if not key:
+        raise RuntimeError("DRUG_API_KEY 환경변수가 설정되지 않았습니다.")
+    return key
+
+
+def _clean_html(text: str) -> str:
+    """API 응답에 포함된 HTML 태그 제거"""
+    return re.sub(r"<[^>]+>", "", text or "").strip()
+
+
+def _normalize_drug_name(name: str) -> str:
+    """약품명에서 용량/제형 접미사 제거해 검색용 이름 반환
+    예: '아미세타정325' → '아미세타', '타이레놀정500mg' → '타이레놀'
+    """
+    name = re.sub(r"\d+(\.\d+)?(mg|mcg|ml|g|%)?$", "", name, flags=re.IGNORECASE)
+    suffixes = ("정", "캡슐", "시럽", "주사액", "주사", "연고", "액제", "현탁액",
+                "과립", "크림", "로션", "겔", "패치", "스프레이", "좌제", "앰플",
+                "필름코팅정", "장용정", "서방정", "츄어블정")
+    for s in sorted(suffixes, key=len, reverse=True):
+        if name.endswith(s):
+            name = name[: -len(s)]
+            break
+    return name.strip()
+
+
+@lru_cache(maxsize=256)
+def fetch_drug_info(drug_name: str) -> Optional[DrugInfo]:
+    """
+    식약처 의약품 개요 정보 API로 약품 정보 조회.
+    검색 순서: 원본 이름 → 정규화 이름 (제형/용량 제거)
+    결과 없으면 None 반환.
+    """
+    for query in dict.fromkeys([drug_name, _normalize_drug_name(drug_name)]):
+        if not query:
+            continue
+        result = _call_api(query)
+        if result:
+            return result
+    return None
+
+
+def _call_api(item_name: str) -> Optional[DrugInfo]:
+    """API 단건 호출"""
+    try:
+        resp = httpx.get(
+            API_URL,
+            params={
+                "serviceKey": _get_api_key(),
+                "itemName": item_name,
+                "type": "json",
+                "numOfRows": 1,
+                "pageNo": 1,
+            },
+            timeout=5.0,
+        )
+        resp.raise_for_status()
+        body = resp.json()
+
+        items = (
+            body.get("body", {}).get("items") or []
+        )
+        if not items:
+            return None
+
+        item = items[0]
+        return DrugInfo(
+            drug_name=item.get("itemName", item_name),
+            generic_name=item.get("material", ""),
+            usage=_clean_html(item.get("efcyQesitm", "")),
+            dosage=_clean_html(item.get("useMethodQesitm", "")),
+            caution=_clean_html(item.get("atpnQesitm", "")),
+            matched=True,
+            image_url=item.get("itemImage") or None,
+        )
+
+    except Exception:
+        return None
+
+
+def fetch_drug_by_features(
+    shape: str,
+    color1: str,
+    color2: Optional[str] = None,
+    print_front: str = "",
+) -> List[DrugInfo]:
+    """
+    식약처 낱알식별 API(v03)로 알약 식별.
+    - print_front(식별문자)가 있으면 item_name으로 검색 후 shape/color로 후처리 필터
+    - print_front가 없으면 검색 불가 (v03는 shape/color 파라미터 필터 미지원)
+    """
+    # 식별문자 없이는 의미 있는 검색 불가
+    if not print_front or len(print_front) < 2:
+        return []
+
+    cache_key = f"{shape}|{color1}|{color2 or ''}|{print_front}"
+    if cache_key in _pill_cache:
+        return _pill_cache[cache_key]
+
+    try:
+        resp = httpx.get(
+            PILL_API_URL,
+            params={
+                "serviceKey": _get_api_key(),
+                "type": "json",
+                "numOfRows": 10,
+                "pageNo": 1,
+                "item_name": print_front,
+            },
+            timeout=5.0,
+        )
+        resp.raise_for_status()
+        body = resp.json()
+
+        items = body.get("body", {}).get("items") or []
+        results: List[DrugInfo] = []
+        for item in items:
+            name = item.get("ITEM_NAME", "")
+            if not name:
+                continue
+            # shape/color 후처리 필터 (일치하지 않으면 제외)
+            item_shape = item.get("DRUG_SHAPE", "")
+            item_color = item.get("COLOR_CLASS1", "")
+            if shape and item_shape and item_shape != shape:
+                continue
+            if color1 and item_color and item_color != color1:
+                continue
+            results.append(DrugInfo(
+                drug_name=name,
+                generic_name=item.get("CLASS_NAME", ""),
+                usage="",
+                dosage="",
+                caution="",
+                matched=True,
+                image_url=item.get("ITEM_IMAGE") or None,
+            ))
+
+        _pill_cache[cache_key] = results
+        return results
+    except Exception:
+        return []

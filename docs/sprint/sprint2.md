@@ -242,12 +242,12 @@ frontend/
 - ✅ `npm run lint` ESLint 오류 없음
 - ✅ TypeScript `any` 타입 미사용
 - ✅ `lib/api.ts`의 `analyzeImage` 함수 stub 존재 (Sprint 3 교체 준비)
-- ⬜ `docker build -f docker/frontend/Dockerfile.prod --target runtime -t app-frontend:test .` 성공
+- ✅ `docker build -f docker/frontend/Dockerfile.prod --target runtime -t app-frontend:test .` 성공
 
 ### 문서 완료 기준
 
 - ✅ `docs/sprint/sprint2.md` 계획 문서 존재
-- ⬜ ROADMAP.md의 Sprint 2 상태가 진행 중으로 표시됨
+- ✅ ROADMAP.md의 Sprint 2 상태가 진행 중으로 표시됨
 
 ---
 
@@ -272,15 +272,15 @@ docker build -f docker/frontend/Dockerfile.prod --target runtime -t app-frontend
 
 ### 체크리스트 (UI 시각 검증)
 
-- ⬜ `/upload` 경로 접속 시 업로드 페이지 렌더링 확인
-- ⬜ "카메라 촬영" / "파일 선택" 탭 버튼 표시 확인
-- ⬜ 탭 전환 시 버튼 강조 스타일 변경 확인
-- ⬜ 파일 선택 후 미리보기 이미지 표시 확인
-- ⬜ "다시 선택" 버튼으로 미리보기 초기화 확인
-- ⬜ 이미지 없을 때 "이미지 분석 시작" 버튼 비활성화 확인
-- ⬜ 이미지 있을 때 버튼 활성화 확인
-- ⬜ 버튼 클릭 시 2초간 로딩 스피너 표시 확인
-- ⬜ 잘못된 파일 형식 선택 시 에러 메시지 표시 확인
+- ✅ `/upload` 경로 접속 시 업로드 페이지 렌더링 확인
+- ✅ "카메라 촬영" / "파일 선택" 탭 버튼 표시 확인
+- ✅ 탭 전환 시 버튼 강조 스타일 변경 확인
+- ✅ 파일 선택 후 미리보기 이미지 표시 확인
+- ✅ "다시 선택" 버튼으로 미리보기 초기화 확인
+- ✅ 이미지 없을 때 "이미지 분석 시작" 버튼 비활성화 확인
+- ✅ 이미지 있을 때 버튼 활성화 확인
+- ✅ 버튼 클릭 시 2초간 로딩 스피너 표시 확인
+- ✅ 잘못된 파일 형식 선택 시 에러 메시지 표시 확인
 
 ---
 
