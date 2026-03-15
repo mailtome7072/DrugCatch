@@ -38,8 +38,13 @@ OCR 파이프라인 후 낱알 파이프라인을 순차 실행하여 결과를 
 
 #### `drug_api.py` (수정)
 
-- **`fetch_drug_by_features(shape, color1, color2, print_front)`**: 식약처 낱알식별 API(`MdcinGrnIdntfcInfoService01`) 호출
-- shape/color1/color2/print_front 파라미터 조합으로 조회, 빈 값은 파라미터에서 제외
+- **`fetch_drug_by_features(shape, color1, color2, print_front)`**: 식약처 낱알식별 API(`MdcinGrnIdntfcInfoService03`) 호출
+  - v01(`MdcinGrnIdntfcInfoService01`)은 서비스 중단됨 → v03로 URL 변경
+  - v03는 shape/color 파라미터 필터 미지원 → `print_front` 값을 `item_name` 파라미터로 검색
+  - 검색 결과를 `DRUG_SHAPE`, `COLOR_CLASS1` 응답 필드로 후처리 필터 적용
+  - 요청 파라미터명: camelCase → snake_case (`drug_shape`, `color_class1`, `color_class2`, `print_front`)
+  - 응답 필드: `CLASS_NAME` → `CHART`(성상), 빈 이름 항목 자동 필터
+- `print_front` 없거나 2자 미만이면 의미 있는 검색 불가하여 빈 리스트 즉시 반환
 - 모듈 레벨 `_pill_cache` dict로 동일 조합 재조회 방지 (lru_cache 미사용 이유: mutable 기본값 허용)
 
 #### `analyze.py` (수정)
@@ -57,6 +62,8 @@ OCR 파이프라인 후 낱알 파이프라인을 순차 실행하여 결과를 
 - ✅ OpenCV contour 에러 시 graceful fallback (빈 리스트 반환)
 - ✅ 낱알식별 결과가 OCR 결과와 중복 없이 병합
 - ✅ pytest 5개 통과 (회귀 없음)
+- ✅ 낱알식별 API v01→v03 전환 완료
+- ✅ image_classifier.py 과도한 처방전 판정 버그 수정 (text_density 조건 추가)
 
 ---
 
@@ -84,7 +91,7 @@ OCR 파이프라인 후 낱알 파이프라인을 순차 실행하여 결과를 
 
 ### 테스트
 
-- ✅ 기존 pytest 5개 회귀 없음
+- ✅ 기존 pytest 5개 회귀 없음 (fix 커밋 후에도 5 passed 확인)
 - Medium: `pill_identifier.py`의 `identify_pills`, `_classify_shape`, `_extract_dominant_colors` 단위 테스트 미작성 — 향후 케이스 추가 시 작성 권장
 
 ### 패턴 준수
@@ -96,10 +103,17 @@ OCR 파이프라인 후 낱알 파이프라인을 순차 실행하여 결과를 
 
 ## 자동 검증 결과
 
-- ✅ `pytest backend/tests/` 5개 통과
+- ✅ `pytest backend/tests/` 5개 통과 (fix 커밋 후 재확인 포함)
 - ✅ `/health` 엔드포인트 HTTP 200 확인 (`{"status":"ok"}`)
 - ✅ `/analyze` 엔드포인트 POST 정상 동작 확인 (status: success, image_type: packaged_drug)
 - ✅ 프론트엔드 `/upload` 라우트 HTTP 200 확인
 - ✅ 프론트엔드 `/result` 라우트 HTTP 200 확인
+
+## Fix 커밋 내역 (스프린트 완료 후)
+
+| 커밋 | 설명 |
+|------|------|
+| `b456195` | 낱알식별 API 파라미터/응답 필드명 수정 (`camelCase → snake_case`), `pill_identifier.py` 배경 마스크 HSV 범위 완화, 색상 매핑 확충 (분홍·연두·갈색·자주 추가) |
+| `f3d62c4` | 낱알식별 API v01→v03 전환, `print_front` 기반 검색 로직으로 변경, 후처리 필터 추가 |
 
 수동 검증 항목: `deploy.md` 참조
