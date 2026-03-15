@@ -1,0 +1,15 @@
+name: Keep Alive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # 10분마다 실행
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 백엔드 헬스체크
+        run: curl -s https://drugcatch-backend.onrender.com/health
+
+      - name: 프론트엔드 헬스체크
+        run: curl -s https://drugcatch-frontend.onrender.com
