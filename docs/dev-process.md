@@ -127,60 +127,57 @@ git pull origin develop
 docker compose up --build
 ```
 
-### 6.2 프로덕션 배포 (deploy-prod agent)
+### 6.2 프로덕션 배포 (Render 자동 배포)
 
-1. develop 브랜치 CI 통과 확인
-2. develop → main PR 생성
-3. GitHub Actions 자동 배포 (GHCR 이미지 빌드 → 서버 SSH 배포)
-4. 실서버 자동 검증 (5단계: SSH 헬스체크, 컨테이너 상태, 로그, Playwright)
+1. `master` 브랜치에 push → Render가 자동으로 빌드 및 배포
+2. 배포 진행 상황: Render 대시보드 → 각 서비스 → Events 탭에서 확인
+3. 배포 완료 후 헬스체크로 정상 동작 확인
 
-### 6.3 실서버 검증 (SSH 접속 정보)
+### 6.3 실서버 검증 (Render)
 
-> TODO: 프로젝트 배포 서버 정보를 이 섹션에 기입하세요.
-
-- **키**: `{SSH_KEY_PATH}` (프로젝트 루트)
-- **호스트**: `{USER}@{SERVER_IP}` (AWS Lightsail 또는 다른 서버)
-- **앱 경로**: `{APP_PATH}`
+- **프론트엔드**: https://drugcatch-frontend.onrender.com
+- **백엔드**: https://drugcatch-backend.onrender.com
+- **헬스체크 엔드포인트**: `GET /health`
 
 ```bash
 # 헬스체크
-curl -s http://{SERVER_IP}/api/v1/health
+curl -s https://drugcatch-backend.onrender.com/health
+# 정상 응답: {"status": "ok"}
 
-# 컨테이너 상태
-ssh -i {SSH_KEY_PATH} {USER}@{SERVER_IP} \
-  "cd {APP_PATH} && sudo docker compose -f docker-compose.prod.yml ps"
-
-# 백엔드 로그 오류 확인
-ssh -i {SSH_KEY_PATH} {USER}@{SERVER_IP} \
-  "cd {APP_PATH} && sudo docker compose -f docker-compose.prod.yml logs backend --tail 30 2>&1 | grep -i 'error\|traceback\|critical' || echo 'No errors found'"
+# 배포 로그 확인
+# Render 대시보드 → drugcatch-backend → Logs
 ```
+
+**Render 대시보드 접근**:
+- https://dashboard.render.com → DrugCatch 서비스 선택
+- Shell 탭: 컨테이너 내부 접근 (Render 무료 플랜 미지원, Starter 이상)
 
 ### 6.4 롤백 시나리오
 
-#### A. 코드만 롤백 (이미지 태그 변경)
+**자동 롤백 스크립트**: `scripts/rollback.sh` 참조
+
+#### A. Git revert 롤백 (권장)
 
 ```bash
-# 이전 버전 태그 확인
-git log --oneline main -5
+# 롤백할 커밋 확인
+git log --oneline master -10
 
-# 서버 SSH 접속 후
-ssh -i {SSH_KEY_PATH} {USER}@{SERVER_IP}
-cd {APP_PATH}
-sudo docker compose -f docker-compose.prod.yml down
-sudo docker pull ghcr.io/{GITHUB_ORG}/{PROJECT}-backend:v{이전_버전}
-sudo docker pull ghcr.io/{GITHUB_ORG}/{PROJECT}-frontend:v{이전_버전}
-sudo docker compose -f docker-compose.prod.yml up -d
+# 특정 커밋으로 revert (새 커밋 생성 → Render 자동 재배포)
+./scripts/rollback.sh <커밋_해시>
 ```
 
-#### B. 긴급 서비스 중단
+#### B. Render 대시보드 수동 롤백
 
-```bash
-ssh -i {SSH_KEY_PATH} {USER}@{SERVER_IP} \
-  "cd {APP_PATH} && sudo docker compose -f docker-compose.prod.yml down"
+```
+Render 대시보드 → 서비스 선택 → Events
+→ 이전 배포 항목 → "Redeploy" 클릭
+```
 
-# 원인 조사 후 서비스 복구
-ssh -i {SSH_KEY_PATH} {USER}@{SERVER_IP} \
-  "cd {APP_PATH} && sudo docker compose -f docker-compose.prod.yml up -d"
+#### C. 긴급 서비스 일시 중단
+
+```
+Render 대시보드 → 서비스 선택 → Settings
+→ "Suspend Service" 클릭
 ```
 
 ---
