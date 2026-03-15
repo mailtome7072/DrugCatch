@@ -43,6 +43,14 @@ export default function UploadPage() {
     };
   }, [cameraStream]);
 
+  // isCameraOpen + cameraStream 세팅 후 DOM 마운트 완료 시점에 srcObject 할당
+  useEffect(() => {
+    if (isCameraOpen && cameraStream && videoRef.current) {
+      videoRef.current.srcObject = cameraStream;
+      videoRef.current.play().catch(console.error);
+    }
+  }, [isCameraOpen, cameraStream]);
+
   // 카메라 열기 (getUserMedia)
   const openCamera = async () => {
     setErrorMessage(null);
@@ -52,13 +60,6 @@ export default function UploadPage() {
       });
       setCameraStream(stream);
       setIsCameraOpen(true);
-      // video 요소에 스트림 연결 (다음 렌더 후 적용)
-      setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
-      }, 0);
       console.log('[UploadPage] 카메라 열림');
     } catch (err) {
       console.error('[UploadPage] 카메라 접근 오류:', err);
