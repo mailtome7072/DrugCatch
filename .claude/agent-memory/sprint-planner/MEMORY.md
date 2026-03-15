@@ -10,11 +10,11 @@
 | 스프린트 | 목표 | 상태 | 완료일 | 브랜치 |
 |----------|------|------|--------|--------|
 | Sprint 1 | 사용자 동의 UI, Next.js 프로젝트 초기화 | ✅ 완료 | 2026-03-15 | sprint1 |
-| Sprint 2 | 이미지 입력 방식 선택, 미리보기, 분석 시작 버튼 | 📋 예정 | — | sprint2 (미생성) |
+| Sprint 2 | 이미지 입력 방식 선택, 미리보기, 분석 시작 버튼 | ✅ 완료 | 2026-03-15 | sprint2 |
 | Sprint 3 | OCR/이미지 인식 백엔드 모듈 | 📋 예정 | — | sprint3 (미생성) |
 | Sprint 4 | 프론트-백엔드 연동, 결과 화면 UI | 📋 예정 | — | sprint4 (미생성) |
 
-**다음 사용 가능한 스프린트 번호: Sprint 2**
+**다음 사용 가능한 스프린트 번호: Sprint 3**
 
 ---
 
@@ -34,7 +34,9 @@
 ```
 frontend/
 ├── app/          # Next.js App Router 페이지
+│   └── upload/   # Sprint 2: 이미지 업로드 라우트
 ├── components/   # 공유 컴포넌트
+├── lib/          # API 클라이언트 등 유틸 (analyzeImage stub — Sprint 3 교체 예정)
 └── public/       # 정적 에셋
 
 docker/
@@ -51,3 +53,6 @@ docker/
 - `docker-compose.yml`의 backend 서비스는 주석 처리 상태 — Sprint 3에서 활성화
 - CI yml(`ci.yml`)의 Docker 빌드 경로: `docker/frontend/Dockerfile.prod` (고정)
 - Dockerfile.prod의 `deps` 스테이지(`--only=production`)와 `builder` 스테이지(`npm ci`) 이중 설치 구조는 레이어 캐시 최적화 여지 있음 (개선 필요 시 builder 스테이지 단일화 고려)
+- 루트 `.gitignore`에 Python용 `lib/` 패턴이 등록되어 있어 `frontend/lib/`가 무시됨 — Sprint 2에서 `!frontend/lib/` 예외 처리 추가 (2026-03-15)
+- `frontend/lib/api.ts`의 `analyzeImage`는 현재 2초 stub — Sprint 3에서 실제 OCR API 엔드포인트로 교체 필요
+- `AnalysisResult.data: unknown`으로 선언 — Sprint 3에서 백엔드 응답 스펙 확정 후 타입 구체화 필요
