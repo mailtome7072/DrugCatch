@@ -7,11 +7,11 @@
 
 ## 현재 미완료 항목
 
-### Sprint 5 — 알약 낱알식별 파이프라인 (2026-03-15)
+### Sprint 6 — Claude Vision API 연동 알약 분석 (2026-03-15)
 
 - ⬜ `docker compose up --build` 프론트엔드 + 백엔드 통합 기동 확인
-- ⬜ packaged_drug 이미지 업로드 후 낱알식별 API 조회 결과 카드 표시 확인
-- ⬜ OCR 결과와 낱알식별 결과 중복 없이 병합 확인
+- ⬜ 알약 이미지 업로드 후 Vision API 결과 카드 표시 확인 (`ANTHROPIC_API_KEY` 설정 후)
+- ⬜ `ANTHROPIC_API_KEY` 미설정 환경에서 graceful fallback 동작 확인
 - ⬜ UI 디자인 시각적 품질 확인 (모바일 375px 포함)
 
 ---
