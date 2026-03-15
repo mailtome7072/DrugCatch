@@ -17,6 +17,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+# frontend/lib/ 은 Next.js 소스 코드이므로 예외 처리
+!frontend/lib/
 parts/
 sdist/
 var/
