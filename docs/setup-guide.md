@@ -6,13 +6,10 @@
 
 ## 1. 사전 요구사항
 
-> TODO: 프로젝트에 필요한 도구 목록을 작성하세요.
-
 - [ ] Git
 - [ ] Docker Desktop
-- [ ] Node.js (버전: TODO)
-- [ ] Python (버전: TODO)
-- [ ] 기타 도구...
+- [ ] Node.js 20 LTS 이상
+- [ ] Python 3.11 이상
 
 ---
 
@@ -34,7 +31,11 @@ cp .env.example .env
 
 `.env` 파일을 열고 필요한 값을 입력합니다:
 
-> TODO: 각 환경변수에 대한 설명과 획득 방법을 작성하세요.
+| 환경변수 | 설명 | 예시 |
+|----------|------|------|
+| `NEXT_PUBLIC_API_URL` | 프론트엔드에서 호출하는 백엔드 API URL | `http://localhost:8000` |
+| `JWT_SECRET` | JWT 서명 키 (로컬 개발 시 임의 문자열 사용 가능) | `dev-secret-key` |
+| `SECRET_KEY` | 앱 시크릿 키 (로컬 개발 시 임의 문자열 사용 가능) | `dev-app-secret` |
 
 ---
 
@@ -54,15 +55,10 @@ docker compose up --build
 
 ## 5. 외부 서비스 설정
 
-> TODO: 프로젝트에서 사용하는 외부 서비스 설정 방법을 작성하세요.
+MVP 단계에서는 DB 없이 정적 JSON 또는 공공 API를 활용합니다.
+별도의 외부 서비스 설정은 불필요합니다.
 
-### 5.1 {외부 서비스 1}
-
-> TODO
-
-### 5.2 {외부 서비스 2}
-
-> TODO
+> 공공 API 연동 시 별도 API 키가 필요할 수 있습니다. 해당 시점에 이 섹션을 업데이트합니다.
 
 ---
 
@@ -70,7 +66,13 @@ docker compose up --build
 
 ### VS Code 권장 익스텐션
 
-> TODO: 프로젝트에 맞는 권장 익스텐션 목록을 작성하세요.
+| 익스텐션 | ID |
+|----------|----|
+| ESLint | `dbaeumer.vscode-eslint` |
+| Prettier | `esbenp.prettier-vscode` |
+| Python | `ms-python.python` |
+| Docker | `ms-azuretools.vscode-docker` |
+| GitLens | `eamodio.gitlens` |
 
 ---
 
