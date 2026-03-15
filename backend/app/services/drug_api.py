@@ -119,13 +119,13 @@ def fetch_drug_by_features(
             "pageNo": 1,
         }
         if shape:
-            params["drugShape"] = shape
+            params["drug_shape"] = shape
         if color1:
-            params["colorClass1"] = color1
+            params["color_class1"] = color1
         if color2:
-            params["colorClass2"] = color2
+            params["color_class2"] = color2
         if print_front:
-            params["printFront"] = print_front
+            params["print_front"] = print_front
 
         resp = httpx.get(PILL_API_URL, params=params, timeout=5.0)
         resp.raise_for_status()
@@ -134,9 +134,13 @@ def fetch_drug_by_features(
         items = body.get("body", {}).get("items") or []
         results: List[DrugInfo] = []
         for item in items:
+            # 응답 필드명은 대문자 (ITEM_NAME, CHART 등)
+            name = item.get("ITEM_NAME", "")
+            if not name:
+                continue
             results.append(DrugInfo(
-                drug_name=item.get("ITEM_NAME", ""),
-                generic_name=item.get("CLASS_NAME", ""),
+                drug_name=name,
+                generic_name=item.get("CHART", ""),  # 성상 (CLASS_NAME 없음)
                 usage="",
                 dosage="",
                 caution="",

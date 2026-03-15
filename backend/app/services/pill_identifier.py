@@ -71,12 +71,12 @@ def _detect_pill_contours(img: np.ndarray) -> List[np.ndarray]:
     """배경 제외 마스크로 알약 윤곽선 검출"""
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # 흰색 배경 마스크
-    white_mask = cv2.inRange(hsv, (0, 0, 200), (180, 30, 255))
+    # 흰색 배경 마스크 (S≤50으로 완화 — 조명 변화 대응)
+    white_mask = cv2.inRange(hsv, (0, 0, 180), (180, 50, 255))
     # 검은색 배경 마스크
-    black_mask = cv2.inRange(hsv, (0, 0, 0), (180, 255, 50))
-    # 회색 배경 마스크
-    gray_mask = cv2.inRange(hsv, (0, 0, 100), (180, 30, 200))
+    black_mask = cv2.inRange(hsv, (0, 0, 0), (180, 255, 60))
+    # 회색 배경 마스크 (S≤50으로 완화)
+    gray_mask = cv2.inRange(hsv, (0, 0, 60), (180, 50, 180))
 
     bg_mask = cv2.bitwise_or(white_mask, cv2.bitwise_or(black_mask, gray_mask))
     fg_mask = cv2.bitwise_not(bg_mask)
@@ -122,8 +122,8 @@ def _extract_dominant_colors(roi_hsv: np.ndarray) -> tuple[str, Optional[str]]:
     s_channel = roi_hsv[:, :, 1].flatten()
     v_channel = roi_hsv[:, :, 2].flatten()
 
-    # 채도가 낮은 픽셀 (무채색) 필터링
-    chromatic = s_channel > 30
+    # 채도가 낮은 픽셀 (무채색) 필터링 — 분홍처럼 채도가 낮은 유채색 포함
+    chromatic = s_channel > 20
 
     if np.sum(chromatic) < 10:
         # 무채색 이미지 → v값으로 결정
@@ -197,21 +197,30 @@ def _map_hsv_to_color_name(h: float, s: float, v: float) -> str:
             return "회색"
 
     # 유채색 — H값 기준 (0~180 범위, OpenCV 기준)
-    if h < 10 or h >= 160:
+    # 식약처 허용 색상: 하양·노랑·주황·분홍·빨강·갈색·연두·초록·청록·파랑·남색·보라·회색·검정·투명
+    if h < 8 or h >= 165:
         return "빨강"
-    elif h < 20:
+    elif h < 18:
         return "주황"
-    elif h < 35:
+    elif h < 30:
         return "노랑"
-    elif h < 75:
+    elif h < 50:
+        # 채도/명도가 낮으면 갈색, 높으면 연두
+        if s < 120 and v < 160:
+            return "갈색"
+        return "연두"
+    elif h < 80:
         return "초록"
-    elif h < 85:
+    elif h < 95:
         return "청록"
     elif h < 130:
         return "파랑"
     elif h < 145:
         return "남색"
-    elif h < 160:
+    elif h < 158:
         return "보라"
     else:
+        # 165 > h >= 158, 채도 높으면 분홍/자주
+        if s > 120:
+            return "자주"
         return "분홍"
