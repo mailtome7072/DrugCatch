@@ -162,12 +162,13 @@ export default function UploadPage() {
     }
   };
 
-  // 탭 전환 시 상태 초기화
+  // 탭 전환 시 상태 초기화, 카메라 탭은 즉시 카메라 열기
   const handleTabChange = (mode: InputMode) => {
     if (mode === inputMode) return;
     closeCamera();
     handleReset();
     setInputMode(mode);
+    if (mode === 'camera') openCamera();
   };
 
   return (
