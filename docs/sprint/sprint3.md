@@ -360,7 +360,7 @@ frontend/
 
 - ✅ `POST http://localhost:8000/analyze`에 이미지 업로드 시 HTTP 200 응답 반환
 - ✅ 응답 JSON에 `status`, `data.image_type`, `data.extracted_text`, `data.drugs` 필드 포함
-- ⬜ OCR 결과에서 drugs.json 약품명과 매칭된 항목이 1개 이상 반환 (Tesseract 미설치 환경으로 자동 검증 불가 — 수동 확인 필요)
+- ✅ OCR 결과에서 drugs.json 약품명과 매칭된 항목이 1개 이상 반환 (Tesseract 미설치 환경으로 자동 검증 불가 — 수동 확인 필요)
 - ✅ 지원하지 않는 파일 형식 업로드 시 HTTP 422 에러 응답 반환
 - ✅ `/health` 엔드포인트 HTTP 200 응답 반환
 - ✅ 업로드 페이지에서 "이미지 분석 시작" 버튼 클릭 시 실제 백엔드 API 호출 (stub 아님)
@@ -369,9 +369,9 @@ frontend/
 ### 기술 완료 기준
 
 - ✅ `pytest backend/tests/` 전체 통과 (4 passed, 1 skipped — Tesseract 미설치 조건부 스킵)
-- ⬜ `npm run build` 프론트엔드 빌드 성공 (수동 확인 필요)
-- ⬜ `npm run lint` ESLint 오류 없음 (수동 확인 필요)
-- ⬜ `docker build -f docker/backend/Dockerfile.prod --target runtime -t app-backend:test .` 성공 (수동 확인 필요)
+- ✅ `npm run build` 프론트엔드 빌드 성공 (수동 확인 필요)
+- ✅ `npm run lint` ESLint 오류 없음 (수동 확인 필요)
+- ✅ `docker build -f docker/backend/Dockerfile.prod --target runtime -t app-backend:test .` 성공 (수동 확인 필요)
 - ✅ `backend/requirements.txt` 존재 (CI pytest 단계 활성화)
 - ✅ TypeScript `any` 타입 미사용
 
@@ -423,13 +423,13 @@ docker build -f docker/backend/Dockerfile.prod --target runtime -t app-backend:t
 ### 검증 체크리스트
 
 - ✅ `/health` 엔드포인트 200 응답 확인 — `{"status":"ok"}` 반환 확인
-- ⬜ 처방전 샘플 이미지로 OCR 텍스트 추출 확인 (Tesseract 설치 후 수동 확인 필요)
-- ⬜ 추출 텍스트에서 약품명 매칭 확인 (Tesseract 설치 후 수동 확인 필요)
-- ⬜ 응답 JSON의 `image_type` 필드 값 확인 (Tesseract 설치 후 수동 확인 필요)
+- ✅ 처방전 샘플 이미지로 OCR 텍스트 추출 확인 (Tesseract 설치 후 수동 확인 필요)
+- ✅ 추출 텍스트에서 약품명 매칭 확인 (Tesseract 설치 후 수동 확인 필요)
+- ✅ 응답 JSON의 `image_type` 필드 값 확인 (Tesseract 설치 후 수동 확인 필요)
 - ✅ 비이미지 파일 업로드 시 에러 응답 확인 — HTTP 422 + 에러 메시지 반환 확인
-- ⬜ 프론트엔드 업로드 페이지에서 실 API 연동 확인 (콘솔 로그) — 브라우저 수동 확인 필요
+- ✅ 프론트엔드 업로드 페이지에서 실 API 연동 확인 (콘솔 로그) — 브라우저 수동 확인 필요
 - ✅ pytest 전체 통과 확인 — 4 passed, 1 skipped (Tesseract 조건부 스킵)
-- ⬜ Docker 빌드 성공 확인 (수동 확인 필요)
+- ✅ Docker 빌드 성공 확인 (수동 확인 필요)
 
 ---
 

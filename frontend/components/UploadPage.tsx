@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { analyzeImage } from '@/lib/api';
 
 // 허용 MIME 타입
@@ -11,6 +12,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 type InputMode = 'camera' | 'file';
 
 export default function UploadPage() {
+  const router = useRouter();
   const [inputMode, setInputMode] = useState<InputMode>('file');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -153,7 +155,12 @@ export default function UploadPage() {
     try {
       const result = await analyzeImage(selectedFile);
       console.log('[UploadPage] 분석 완료:', result);
-      // Sprint 4에서 결과 화면으로 연결 예정
+      if (result.status === 'success') {
+        sessionStorage.setItem('analysisResult', JSON.stringify(result));
+        router.push('/result');
+      } else {
+        setErrorMessage(result.message ?? '분석에 실패했습니다. 다시 시도해 주세요.');
+      }
     } catch (err) {
       console.error('[UploadPage] 분석 오류:', err);
       setErrorMessage('분석 중 오류가 발생했습니다. 다시 시도해 주세요.');

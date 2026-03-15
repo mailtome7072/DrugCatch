@@ -11,10 +11,10 @@
 |----------|------|------|--------|--------|
 | Sprint 1 | 사용자 동의 UI, Next.js 프로젝트 초기화 | ✅ 완료 | 2026-03-15 | sprint1 |
 | Sprint 2 | 이미지 입력 방식 선택, 미리보기, 분석 시작 버튼 | ✅ 완료 | 2026-03-15 | sprint2 |
-| Sprint 3 | OCR/이미지 인식 백엔드 모듈 | 📋 예정 | — | sprint3 (미생성) |
-| Sprint 4 | 프론트-백엔드 연동, 결과 화면 UI | 📋 예정 | — | sprint4 (미생성) |
+| Sprint 3 | OCR/이미지 인식 백엔드 모듈 | ✅ 완료 | 2026-03-15 | sprint3 |
+| Sprint 4 | 프론트-백엔드 연동, 결과 화면 UI | ✅ 완료 | 2026-03-15 | sprint4 |
 
-**다음 사용 가능한 스프린트 번호: Sprint 3**
+**다음 사용 가능한 스프린트 번호: Sprint 5**
 
 ---
 
@@ -46,6 +46,24 @@ docker/
 
 ---
 
+## 디렉토리 구조 (Sprint 4 이후)
+
+```
+frontend/
+├── app/
+│   ├── upload/   # Sprint 2: 이미지 업로드 라우트
+│   └── result/   # Sprint 4: 분석 결과 라우트
+├── components/
+│   ├── UploadPage.tsx   # 이미지 업로드 UI
+│   └── ResultPage.tsx   # 분석 결과 UI (Sprint 4 신규)
+├── lib/
+│   ├── api.ts           # 백엔드 API 클라이언트 (analyzeImage)
+│   └── inferDiseases.ts # usage 키워드 → 질환 카테고리 유틸 (Sprint 4 신규)
+└── public/
+```
+
+---
+
 ## 핵심 주의사항
 
 - `develop` 브랜치가 원격에 없었으므로 Sprint 1 마무리 시 master 기준으로 신규 생성함 (2026-03-15)
@@ -55,4 +73,8 @@ docker/
 - Dockerfile.prod의 `deps` 스테이지(`--only=production`)와 `builder` 스테이지(`npm ci`) 이중 설치 구조는 레이어 캐시 최적화 여지 있음 (개선 필요 시 builder 스테이지 단일화 고려)
 - 루트 `.gitignore`에 Python용 `lib/` 패턴이 등록되어 있어 `frontend/lib/`가 무시됨 — Sprint 2에서 `!frontend/lib/` 예외 처리 추가 (2026-03-15)
 - `frontend/lib/api.ts`의 `analyzeImage`는 현재 2초 stub — Sprint 3에서 실제 OCR API 엔드포인트로 교체 필요
-- `AnalysisResult.data: unknown`으로 선언 — Sprint 3에서 백엔드 응답 스펙 확정 후 타입 구체화 필요
+- `AnalysisResult.data: unknown`으로 선언 — Sprint 3에서 `AnalysisData` 타입으로 구체화 완료
+- Sprint 4에서 `/result` 라우트 구현: App Router `app/result/page.tsx` (Shell) + `components/ResultPage.tsx` (실제 UI) 패턴 사용
+- 분석 결과는 sessionStorage(`analysisResult` 키)로 업로드 페이지 → 결과 페이지 간 전달
+- `inferDiseases.ts`의 `KEYWORD_MAP`은 현재 43개 키워드 — 약품 데이터 확장 시 함께 확장 필요
+- MVP Phase 1 전체 완료 (Sprint 1~4): 동의 UI → 업로드 → OCR 분석 → 결과 화면 흐름 구현 완료

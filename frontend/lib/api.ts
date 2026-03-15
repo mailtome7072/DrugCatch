@@ -6,6 +6,7 @@ export type DrugInfo = {
   caution: string;
   dosage: string;
   matched: boolean;
+  image_url?: string | null;
 };
 
 // 분석 데이터 타입
