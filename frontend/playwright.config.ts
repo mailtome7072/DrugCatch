@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
@@ -18,5 +18,14 @@ export default defineConfig({
       name: 'chromium',
       use: { browserName: 'chromium' },
     },
+    {
+      // 모바일 375px 반응형 검증 (iPhone SE)
+      name: 'mobile-chrome',
+      use: {
+        ...devices['iPhone SE'],
+        screenshot: 'on',  // 모바일은 항상 스크린샷 저장 (검증 기록용)
+      },
+    },
   ],
+  outputDir: '../docs/sprint/sprint10/playwright-results',
 });
