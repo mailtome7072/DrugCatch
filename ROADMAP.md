@@ -69,10 +69,12 @@ Backend API (Node.js/Express)
 ## 6. 프로젝트 단계별 계획
 
 ### Phase 0 — 프로젝트 초기 설정 ✅
-- 저장소 생성 및 브랜치 전략 설정
-- Claude Code 에이전트 설정
-- CI/CD 파이프라인 구성
-- 개발 프로세스 문서화
+- ✅ 저장소 생성 및 브랜치 전략 설정
+- ✅ Claude Code 에이전트 설정
+- ✅ CI/CD 파이프라인 구성
+- ✅ 개발 프로세스 문서화
+- ✅ Git 협업 규칙 문서화 (docs/git-convention.md)
+- ✅ 환경 설정 가이드 완성 (docs/setup-guide.md)
 
 ### Phase 1 — 파일럿 MVP 바이브 코딩
 
