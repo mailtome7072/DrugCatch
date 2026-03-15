@@ -343,8 +343,8 @@ export default function UploadPage() {
           </button>
         )}
 
-        {/* 선택 영역 아래 안내 문구 (미리보기 없을 때) */}
-        {!isCameraOpen && !previewUrl && (
+        {/* 선택 영역/카메라 뷰파인더 아래 안내 문구 (미리보기 없을 때) */}
+        {!previewUrl && (
           <div className="mt-5 flex flex-col text-xs text-gray-400" style={{ gap: '10px' }}>
             <span>분석을 위한 이미지는 저장되지 않습니다.</span>
             <span>분석 대상 이미지: 처방전, 약봉투(복약지도 출력물), 처방 약제</span>
