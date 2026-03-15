@@ -1,7 +1,7 @@
 import type { DrugInfo } from '@/lib/api';
 
 // usage 키워드 → 질환 카테고리 매핑 테이블
-const KEYWORD_MAP: Record<string, string> = {
+export const KEYWORD_MAP: Record<string, string> = {
   해열: '발열',
   진통: '통증',
   소염: '염증',

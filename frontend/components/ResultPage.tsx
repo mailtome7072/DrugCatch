@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { AnalysisResult, DrugInfo } from '@/lib/api';
-import { inferDiseases } from '@/lib/inferDiseases';
+import { inferDiseases, KEYWORD_MAP } from '@/lib/inferDiseases';
 
 // 이미지 유형 배지 텍스트
 const IMAGE_TYPE_LABEL: Record<string, string> = {
@@ -20,41 +20,51 @@ const IMAGE_TYPE_COLOR: Record<string, string> = {
 };
 
 function DrugCard({ drug }: { drug: DrugInfo }) {
-  if (!drug.matched) {
-    return (
-      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 opacity-60">
-        <p className="font-semibold text-gray-700">{drug.drug_name}</p>
-        <p className="text-sm text-gray-400 mt-1">데이터 없음</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="rounded-xl border border-blue-200 bg-white p-4 space-y-2">
-      <div>
-        <p className="font-semibold text-gray-900">{drug.drug_name}</p>
-        {drug.generic_name && (
-          <p className="text-sm text-gray-500">{drug.generic_name}</p>
+    <div className="rounded-xl border border-blue-200 bg-white overflow-hidden flex">
+      {/* 좌측: 약품 이미지 */}
+      <div className="w-28 shrink-0 bg-gray-50 flex items-center justify-center border-r border-blue-100 p-2">
+        {drug.image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={drug.image_url}
+            alt={`${drug.drug_name} 이미지`}
+            className="w-full h-auto object-contain max-h-24"
+          />
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
+          </svg>
         )}
       </div>
-      {drug.usage && (
+
+      {/* 우측: 약품 정보 */}
+      <div className="flex-1 p-4 space-y-2 min-w-0">
         <div>
-          <span className="text-xs font-medium text-gray-500">용도</span>
-          <p className="text-sm text-gray-700">{drug.usage}</p>
+          <p className="font-semibold text-gray-900 truncate">{drug.drug_name}</p>
+          {drug.generic_name && (
+            <p className="text-xs text-gray-500 truncate">{drug.generic_name}</p>
+          )}
         </div>
-      )}
-      {drug.dosage && (
-        <div>
-          <span className="text-xs font-medium text-gray-500">용법</span>
-          <p className="text-sm text-gray-700">{drug.dosage}</p>
-        </div>
-      )}
-      {drug.caution && (
-        <div>
-          <span className="text-xs font-medium text-gray-500">주의사항</span>
-          <p className="text-sm text-red-600">{drug.caution}</p>
-        </div>
-      )}
+        {drug.usage && (
+          <div>
+            <span className="text-xs font-medium text-gray-400">용도</span>
+            <p className="text-sm text-gray-700">{drug.usage}</p>
+          </div>
+        )}
+        {drug.dosage && (
+          <div>
+            <span className="text-xs font-medium text-gray-400">용법</span>
+            <p className="text-sm text-gray-700">{drug.dosage}</p>
+          </div>
+        )}
+        {drug.caution && (
+          <div>
+            <span className="text-xs font-medium text-gray-400">주의사항</span>
+            <p className="text-sm text-red-600">{drug.caution}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -96,7 +106,20 @@ export default function ResultPage() {
   const { data } = result;
   const diseases = inferDiseases(data.drugs);
   const matchedDrugs = data.drugs.filter((d) => d.matched);
-  const usageList = Array.from(new Set(matchedDrugs.flatMap((d) => d.usage.split(/[,、，]/).map((u) => u.trim()).filter(Boolean))));
+
+  // 유추 병명과 연관된 usage 항목만 추출, 최대 4개
+  const diseaseSet = new Set(diseases);
+  const usageList = Array.from(
+    new Set(
+      matchedDrugs
+        .flatMap((d) => d.usage.split(/[,、，]/).map((u) => u.trim()).filter(Boolean))
+        .filter((u) =>
+          Object.entries(KEYWORD_MAP).some(
+            ([keyword, category]) => u.includes(keyword) && diseaseSet.has(category)
+          )
+        )
+    )
+  ).slice(0, 4);
   const imageTypeLabel = IMAGE_TYPE_LABEL[data.image_type] ?? '불명';
   const imageTypeColor = IMAGE_TYPE_COLOR[data.image_type] ?? 'bg-gray-100 text-gray-600';
 
@@ -112,8 +135,8 @@ export default function ResultPage() {
           <h1 className="text-2xl font-bold text-gray-900">분석 결과</h1>
         </div>
 
-        {/* 약품 없을 때 */}
-        {data.drugs.length === 0 && (
+        {/* 인식된 약품 없을 때 */}
+        {matchedDrugs.length === 0 && (
           <div className="rounded-xl border border-gray-200 bg-white p-6 text-center text-gray-500 text-sm">
             약품 정보를 추출하지 못했습니다.
           </div>
@@ -152,12 +175,12 @@ export default function ResultPage() {
           </section>
         )}
 
-        {/* 섹션 3 — 약품 카드 리스트 */}
-        {data.drugs.length > 0 && (
+        {/* 섹션 3 — 약품 카드 리스트 (matched=true만 표시) */}
+        {matchedDrugs.length > 0 && (
           <section className="space-y-2">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">약품 목록</h2>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">처방 약품</h2>
             <div className="space-y-3">
-              {data.drugs.map((drug, idx) => (
+              {matchedDrugs.map((drug, idx) => (
                 <DrugCard key={idx} drug={drug} />
               ))}
             </div>

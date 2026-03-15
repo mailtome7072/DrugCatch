@@ -12,6 +12,7 @@ class DrugInfo(BaseModel):
     caution: str
     dosage: str
     matched: bool
+    image_url: Optional[str] = None
 
 
 class AnalysisData(BaseModel):
