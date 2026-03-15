@@ -5,7 +5,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException, UploadFile
 
 from app.models.schemas import AnalysisData, AnalysisResult, DrugInfo
-from app.services.drug_api import fetch_drug_info
+from app.services.drug_api import fetch_drug_by_features, fetch_drug_info
 from app.services.drug_lookup import extract_unmatched_names, lookup_drugs
 from app.services.image_classifier import classify_image
 from app.services.ocr import extract_text
@@ -56,24 +56,37 @@ async def analyze_image(file: UploadFile):
         else:
             still_unmatched.append(candidate)
 
-    # 중복 제거 (약품명 기준)
-    seen_names: set = set()
-    deduped: List[DrugInfo] = []
-    for drug in matched_drugs + api_matched + still_unmatched:
-        if drug.drug_name not in seen_names:
-            seen_names.add(drug.drug_name)
-            deduped.append(drug)
-    all_drugs = deduped
+    # 낱알 식별 파이프라인 (packaged_drug/unknown 때만)
+    pill_identified: List[DrugInfo] = []
+    if image_type in ("packaged_drug", "unknown"):
+        from app.services.pill_identifier import identify_pills
+        pill_features_list = identify_pills(image_bytes)
+        for features in pill_features_list:
+            results = fetch_drug_by_features(
+                shape=features.shape,
+                color1=features.color1,
+                color2=features.color2,
+                print_front=features.print_front,
+            )
+            pill_identified.extend(results)
+
+    # 중복 제거 (약품명 기준) — pill_identified 포함
+    seen: set = set()
+    all_drugs: List[DrugInfo] = []
+    for drug in matched_drugs + api_matched + still_unmatched + pill_identified:
+        if drug.drug_name not in seen:
+            seen.add(drug.drug_name)
+            all_drugs.append(drug)
 
     all_matched = matched_drugs + api_matched
 
     # 경고 생성
     warnings: List[str] = []
-    if not extracted_text:
+    if not extracted_text and not pill_identified:
         warnings.append("텍스트를 추출하지 못했습니다. 이미지 품질을 확인해주세요.")
     if image_type == "unknown":
         warnings.append("이미지 유형을 판별할 수 없습니다.")
-    if not all_matched and extracted_text:
+    if not all_matched and not pill_identified and extracted_text:
         warnings.append("등록된 약품 데이터와 일치하는 약품을 찾지 못했습니다.")
 
     data = AnalysisData(
