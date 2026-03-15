@@ -3,13 +3,17 @@ from __future__ import annotations
 import os
 import re
 from functools import lru_cache
-from typing import Optional
+from typing import List, Optional
 
 import httpx
 
 from app.models.schemas import DrugInfo
 
 API_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList"
+PILL_API_URL = "https://apis.data.go.kr/1471000/MdcinGrnIdntfcInfoService01/getMdcinGrnIdntfcInfoList01"
+
+# 낱알식별 API 결과 캐시 (파라미터 key → List[DrugInfo])
+_pill_cache: dict = {}
 
 
 def _get_api_key() -> str:
@@ -28,9 +32,7 @@ def _normalize_drug_name(name: str) -> str:
     """약품명에서 용량/제형 접미사 제거해 검색용 이름 반환
     예: '아미세타정325' → '아미세타', '타이레놀정500mg' → '타이레놀'
     """
-    # 숫자+단위 제거
     name = re.sub(r"\d+(\.\d+)?(mg|mcg|ml|g|%)?$", "", name, flags=re.IGNORECASE)
-    # 제형 접미사 제거
     suffixes = ("정", "캡슐", "시럽", "주사액", "주사", "연고", "액제", "현탁액",
                 "과립", "크림", "로션", "겔", "패치", "스프레이", "좌제", "앰플",
                 "필름코팅정", "장용정", "서방정", "츄어블정")
@@ -93,3 +95,55 @@ def _call_api(item_name: str) -> Optional[DrugInfo]:
 
     except Exception:
         return None
+
+
+def fetch_drug_by_features(
+    shape: str,
+    color1: str,
+    color2: Optional[str] = None,
+    print_front: str = "",
+) -> List[DrugInfo]:
+    """
+    식약처 낱알식별 API로 알약 시각적 특징 기반 약품 조회.
+    shape, color1, print_front 조합으로 조회하며 빈 값은 파라미터에서 제외.
+    """
+    cache_key = f"{shape}|{color1}|{color2 or ''}|{print_front}"
+    if cache_key in _pill_cache:
+        return _pill_cache[cache_key]
+
+    try:
+        params: dict = {
+            "serviceKey": _get_api_key(),
+            "type": "json",
+            "numOfRows": 3,
+            "pageNo": 1,
+        }
+        if shape:
+            params["drugShape"] = shape
+        if color1:
+            params["colorClass1"] = color1
+        if color2:
+            params["colorClass2"] = color2
+        if print_front:
+            params["printFront"] = print_front
+
+        resp = httpx.get(PILL_API_URL, params=params, timeout=5.0)
+        resp.raise_for_status()
+        body = resp.json()
+
+        items = body.get("body", {}).get("items") or []
+        results: List[DrugInfo] = []
+        for item in items:
+            results.append(DrugInfo(
+                drug_name=item.get("ITEM_NAME", ""),
+                generic_name=item.get("CLASS_NAME", ""),
+                usage="",
+                dosage="",
+                caution="",
+                matched=True,
+            ))
+
+        _pill_cache[cache_key] = results
+        return results
+    except Exception:
+        return []
