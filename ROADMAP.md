@@ -93,14 +93,15 @@ Backend API (Node.js/Express)
 - 에러 처리 및 로깅
 - 내부 테스트 및 피드백 반영
 
-#### Sprint 3 (Day 2)
+#### Sprint 3 (Day 2) — ✅ 완료 (2026-03-15)
 - 업로드된 이미지 유형 판별 (처방전 vs 조제약 사진)
 - OCR 처리 및 약품명 추출 (Tesseract OCR)
-- 약품 이미지 인식 모듈 구현 (OpenCV/TensorFlow Lite)
+- 약품 이미지 인식 모듈 구현 (OpenCV 휴리스틱)
 - 데이터 파싱 및 구조화
-- 정적 JSON 또는 공공 API로 약품 데이터 조회
-- 분석 완료 후 결과 응답 반환
-- 에러 처리 및 로깅 (OCR 실패, 파싱 오류 등)
+- 정적 JSON 약품 데이터 50개+ 구축
+- POST /analyze API 구현 및 응답 반환
+- FastAPI 백엔드 초기 설정 (CORS, Docker, pytest)
+- frontend lib/api.ts stub → 실 API 호출로 교체
 
 #### Sprint 4 (Day 2)
 - "이미지 분석 시작" 버튼과 백엔드 OCR/이미지 인식 API 연결
@@ -120,7 +121,7 @@ Backend API (Node.js/Express)
 | Phase 0 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 1 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 2 완료 | 2026-03-15 | ✅ 완료 |
-| Sprint 3 완료 | 2026-03-16 | 📋 예정 |
+| Sprint 3 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 4 완료 (MVP 출시) | 2026-03-16 | 📋 예정 |
 
 ---

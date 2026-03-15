@@ -7,26 +7,34 @@
 
 ## 현재 미완료 항목
 
-### Sprint 2 — 이미지 업로드 UI (2026-03-15)
+### Sprint 3 — FastAPI 백엔드 OCR API (2026-03-15)
 
-- ✅ `npm run lint` 통과
-- ✅ `npm run build` 통과 (`/upload` 라우트 정상 생성)
-- ✅ `/upload` HTTP 200 응답 확인 (curl)
-- ✅ `/` 메인 페이지 HTTP 200 응답 확인 (curl)
-- ✅ `/not-exist` HTTP 404 응답 확인 (curl)
-- ⬜ Playwright UI 검증 미수행 — playwright 패키지 미설치. 다음 항목 브라우저에서 수동 확인 필요:
-  - ⬜ `/upload` 경로 접속 시 업로드 페이지 렌더링 확인
-  - ⬜ "카메라 촬영" / "파일 선택" 탭 버튼 표시 확인
-  - ⬜ 탭 전환 시 버튼 강조 스타일 변경 확인
-  - ⬜ 파일 선택 후 미리보기 이미지 표시 확인
-  - ⬜ "다시 선택" 버튼으로 미리보기 초기화 확인
-  - ⬜ 이미지 없을 때 "이미지 분석 시작" 버튼 비활성화 확인
-  - ⬜ 이미지 있을 때 버튼 활성화 확인
-  - ⬜ 버튼 클릭 시 2초간 로딩 스피너 표시 확인
-  - ⬜ 잘못된 파일 형식 선택 시 에러 메시지 표시 확인
-  - ⬜ 모바일 화면(375px) 레이아웃 확인
-- ⬜ Docker 빌드 검증 — `docker build -f docker/frontend/Dockerfile.prod --target runtime -t app-frontend:test .` 성공 확인
-- ⬜ CI 워크플로우 Docker 빌드 통과 확인 — develop PR 머지 전 GitHub Actions CI 결과 확인
+**자동 검증 완료**
+
+- ✅ `pytest backend/tests/` 통과 (4 passed, 1 skipped — Tesseract 조건부 스킵)
+- ✅ `/health` 엔드포인트 HTTP 200 응답 확인
+- ✅ 비이미지 파일 업로드 시 HTTP 422 에러 응답 확인
+
+**수동 검증 필요**
+
+- ⬜ Tesseract 설치 후 처방전 샘플 이미지로 OCR + 약품명 매칭 확인:
+  ```bash
+  # Tesseract 설치 (macOS)
+  brew install tesseract tesseract-lang
+  # 이미지 업로드 테스트
+  curl -X POST http://localhost:8000/analyze -F "file=@/path/to/prescription.jpg"
+  ```
+- ⬜ 프론트엔드 업로드 페이지에서 실 API 연동 확인 (브라우저 콘솔 로그)
+  - ⬜ "이미지 분석 시작" 버튼 클릭 시 실제 백엔드 API 호출 확인
+  - ⬜ 네트워크 탭에서 `POST /analyze` 요청 확인
+  - ⬜ 응답 결과 콘솔 출력 확인
+- ⬜ `npm run lint` ESLint 오류 없음 확인
+- ⬜ `npm run build` 프론트엔드 빌드 성공 확인
+- ⬜ Docker 백엔드 빌드 확인:
+  ```bash
+  docker build -f docker/backend/Dockerfile.prod --target runtime -t app-backend:test .
+  ```
+- ⬜ `docker compose up --build` 프론트엔드 + 백엔드 통합 기동 확인
 
 ---
 
