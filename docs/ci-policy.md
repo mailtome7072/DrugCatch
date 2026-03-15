@@ -122,7 +122,6 @@ docker compose up --build
 | `LIGHTSAIL_SSH_KEY` | 서버 인스턴스 SSH 프라이빗 키 |
 | `LIGHTSAIL_HOST` | 서버 IP 또는 도메인 |
 | `LIGHTSAIL_USER` | SSH 사용자명 (예: `ubuntu`) |
-| `POSTGRES_PASSWORD` | DB 비밀번호 |
 | `JWT_SECRET` | JWT 서명 키 |
 | `SECRET_KEY` | 앱 시크릿 키 |
 | `NEXT_PUBLIC_API_URL` | 프론트엔드에서 사용하는 백엔드 API URL |
@@ -144,16 +143,6 @@ docker pull ghcr.io/{GITHUB_ORG}/{PROJECT}-backend:v{이전_버전}
 docker pull ghcr.io/{GITHUB_ORG}/{PROJECT}-frontend:v{이전_버전}
 docker compose -f docker-compose.prod.yml up -d
 ```
-
-### DB 마이그레이션 롤백
-
-```bash
-# Alembic 다운그레이드 (주의: 데이터 손실 가능)
-alembic downgrade -1
-```
-
-> ⚠️ DB 마이그레이션 롤백은 데이터 손실이 발생할 수 있습니다.
-> 롤백 전 반드시 DB 백업을 수행하세요.
 
 ---
 

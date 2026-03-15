@@ -1,16 +1,15 @@
-# choiji-guide-big
+# DrugCatch
 
-> Claude Code 설정 예제 + 개발 프로세스 템플릿
+> 처방전 및 약품 사진으로 복약정보를 조회하는 웹 MVP
 
-이 저장소는 Claude Code를 활용한 개발 워크플로우의 뼈대와 에이전트 설정 예제를 담고 있습니다.
-동료 개발자들이 유사한 프로세스를 자신의 프로젝트에 적용할 수 있도록 공유용으로 만들어졌습니다.
+이미지 입력(촬영 또는 업로드) → OCR/이미지 인식 → 병명·증상·약품 정보 카드 결과 표시까지의 기본 흐름을 구현합니다.
 
 ---
 
 ## 📁 프로젝트 구조
 
 ```
-choiji-guide-big/
+DrugCatch/
 ├── .claude/
 │   ├── agents/             # Claude 에이전트 정의
 │   │   ├── sprint-planner.md   # 스프린트 계획 수립 에이전트
@@ -36,7 +35,6 @@ choiji-guide-big/
 │   └── deploy-history/         # 배포/검증 기록 아카이브
 ├── CLAUDE.md                   # Claude Code 프로젝트 지시 파일
 ├── ROADMAP.md                  # 프로젝트 로드맵
-├── PLAN.md                     # 프로젝트 계획
 ├── deploy.md                   # 현재 미완료 수동 작업 목록
 └── .env.example                # 환경변수 템플릿
 ```
@@ -50,7 +48,7 @@ choiji-guide-big/
 ### 1. sprint-planner
 **트리거**: 새 스프린트 계획 수립 시
 
-ROADMAP.md와 PLAN.md를 분석하고 writing-plans 스킬을 참조하여 실행 가능한 스프린트 계획을 자동으로 수립합니다.
+ROADMAP.md를 분석하고 writing-plans 스킬을 참조하여 실행 가능한 스프린트 계획을 자동으로 수립합니다.
 
 ```
 사용자: "다음 스프린트에서 사용자 인증 기능을 구현하고 싶어"
@@ -131,14 +129,13 @@ PRD(제품 요구사항 문서)를 분석하여 Agile/스크럼 방법론에 기
 
 ## ⚙️ 설정 방법
 
-### 1. 이 저장소를 새 프로젝트에 적용하기
+### 1. 로컬 개발 환경 설정
 
-1. `CLAUDE.md`에서 저장소 URL을 새 프로젝트로 변경
-2. `docs/dev-process.md` 섹션 6.3에 실서버 SSH 접속 정보 기입
-3. `.github/workflows/deploy.yml`에서 이미지명 플레이스홀더 (`YOUR_GITHUB_ORG`, `YOUR_PROJECT`) 변경
-4. GitHub Secrets 설정 (`LIGHTSAIL_SSH_KEY`, `LIGHTSAIL_HOST`, 등)
-5. `.env.example`을 복사하여 `.env` 생성 후 값 입력
-6. `docs/setup-guide.md`에 프로젝트별 설정 가이드 작성
+1. `docs/setup-guide.md` 가이드에 따라 로컬 환경을 구성합니다.
+2. `.env.example`을 복사하여 `.env` 생성 후 값 입력합니다.
+3. `docs/dev-process.md` 섹션 6.3에 실서버 SSH 접속 정보를 기입합니다.
+4. `.github/workflows/deploy.yml`에서 이미지명 플레이스홀더 (`YOUR_GITHUB_ORG`, `YOUR_PROJECT`) 를 변경합니다.
+5. GitHub Secrets 설정 (`LIGHTSAIL_SSH_KEY`, `LIGHTSAIL_HOST`, 등)
 
 ### 2. CLAUDE.md 커스터마이징
 

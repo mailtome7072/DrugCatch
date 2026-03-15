@@ -19,8 +19,8 @@
 ## 2. 저장소 클론
 
 ```bash
-git clone https://github.com/frogy95/choiji-guide-big.git
-cd choiji-guide-big
+git clone https://github.com/mailtome7072/DrugCatch.git
+cd DrugCatch
 ```
 
 ---
@@ -43,12 +43,6 @@ cp .env.example .env
 ```bash
 # Docker Compose로 전체 스택 실행
 docker compose up --build
-
-# 백엔드 DB 마이그레이션 (최초 1회)
-docker compose exec backend alembic upgrade head
-
-# 초기 데이터 시드 (필요한 경우)
-docker compose exec backend python scripts/seed.py
 ```
 
 서비스 접속:
