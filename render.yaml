@@ -21,9 +21,8 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     plan: free
-    buildArgs:
-      - key: NEXT_PUBLIC_API_URL
-        value: https://drugcatch-backend.onrender.com  # 백엔드 서비스 URL
     envVars:
       - key: NODE_ENV
         value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://drugcatch-backend.onrender.com
