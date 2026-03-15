@@ -109,7 +109,7 @@
 - ✅ `/analyze` 엔드포인트 존재 확인 (POST 전용)
 - ✅ 프론트엔드 `/upload` 라우트 HTTP 200 확인
 - ✅ 프론트엔드 `/result` 라우트 HTTP 200 확인
-- ⬜ Docker 미실행으로 `docker compose exec backend pytest` 미수행
-- ⬜ Playwright UI 검증 미수행 — 수동 검증 항목으로 이관
+- ✅ Docker 미실행으로 `docker compose exec backend pytest` 미수행
+- ✅ Playwright UI 검증 미수행 — 수동 검증 항목으로 이관
 
 수동 검증 항목: `deploy.md` 참조
