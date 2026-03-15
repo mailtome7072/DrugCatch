@@ -41,15 +41,46 @@ cp .env.example .env
 
 ## 4. 로컬 개발 환경 실행
 
+### 방법 A — Docker Compose (권장)
+
 ```bash
-# Docker Compose로 전체 스택 실행
+# 전체 스택 한 번에 실행 (Tesseract 포함)
 docker compose up --build
+```
+
+### 방법 B — 개별 실행
+
+#### 백엔드 (FastAPI)
+
+먼저 Tesseract OCR을 시스템에 설치해야 합니다:
+
+```bash
+# macOS
+brew install tesseract tesseract-lang
+
+# Ubuntu/Debian
+sudo apt-get install tesseract-ocr tesseract-ocr-kor
+```
+
+Python 의존성 설치 및 서버 실행:
+
+```bash
+pip install -r backend/requirements.txt
+PYTHONPATH=backend uvicorn main:app --reload --port 8000 --app-dir backend
+```
+
+#### 프론트엔드 (Next.js)
+
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
 서비스 접속:
 - 프론트엔드: http://localhost:3000
 - 백엔드 API: http://localhost:8000
-- API 문서: http://localhost:8000/docs
+- API 문서 (Swagger): http://localhost:8000/docs
 
 ---
 

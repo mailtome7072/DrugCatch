@@ -37,12 +37,12 @@
 ---
 
 ## 4. 기술 스택
-- **Frontend:** React.js / Next.js, TailwindCSS 또는 Material UI
-- **Backend:** Node.js (Express), Python (OCR 모듈)
-- **OCR/이미지 처리:** Tesseract OCR, OpenCV / TensorFlow Lite
+- **Frontend:** Next.js, TailwindCSS
+- **Backend:** Python (FastAPI)
+- **OCR/이미지 처리:** Tesseract OCR, OpenCV (휴리스틱 이미지 유형 판별)
+- **약품 데이터:** 정적 JSON (50개+, DB 없음)
 - **CI/CD:** GitHub Actions (무료 티어 활용)
-- **Infra:** Vercel/Netlify (무료 티어 활용)  
-  ※ MVP 단계에서는 DB 없이 진행, 약품 데이터는 정적 JSON 또는 공공 API 활용
+- **Infra:** AWS Lightsail (Docker Compose 배포)
 
 ---
 
@@ -50,19 +50,20 @@
 사용자 브라우저
 │
 ▼
-Frontend (React/Next.js)
+Frontend (Next.js) — localhost:3000
+│  POST /analyze (multipart/form-data)
+▼
+Backend API (FastAPI) — localhost:8000
+│
+├── 이미지 유형 판별 (OpenCV 휴리스틱)
+├── OCR 모듈 (Tesseract kor+eng)
+├── 약품명 매칭 (정규표현식)
 │
 ▼
-Backend API (Node.js/Express)
-│
-├── OCR 모듈 (Python/Tesseract)
-├── 이미지 인식 모듈 (OpenCV/TensorFlow Lite)
+정적 약품 데이터 (backend/data/drugs.json, 50개+)
 │
 ▼
-정적 데이터(JSON) 또는 공공 API
-│
-▼
-결과 반환 (병명 → 증상 → 약품 카드)
+결과 반환 (image_type → extracted_text → drugs 카드)
 
 ---
 
