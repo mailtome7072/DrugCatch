@@ -127,6 +127,13 @@ Backend API (FastAPI) — localhost:8000
 - `ANTHROPIC_API_KEY` 미설정 시 graceful fallback 구현
 - Docker 빌드 오류(`libgl1-mesa-glx` → `libgl1`) 수정
 
+#### Sprint 7 — ✅ 완료 (2026-03-16)
+- `vision_identifier.py`, `pill_identifier.py`, `drug_api.py` 핵심 모듈 단위 테스트 추가
+- `test_vision_identifier.py` 8개 테스트 (Claude Vision API mock 기반)
+- `test_pill_identifier.py` 16개 테스트 (OpenCV 합성 이미지 기반)
+- `test_drug_api.py` 8개 테스트 (httpx mock 기반)
+- 전체 40개 테스트 통과, 외부 API 실제 호출 없음
+
 ---
 
 ## 7. 마일스톤
@@ -140,6 +147,7 @@ Backend API (FastAPI) — localhost:8000
 | Sprint 4 완료 (MVP 출시) | 2026-03-15 | ✅ 완료 |
 | Sprint 5 완료 (낱알식별) | 2026-03-15 | ✅ 완료 |
 | Sprint 6 완료 (Vision API) | 2026-03-15 | ✅ 완료 |
+| Sprint 7 완료 (단위 테스트) | 2026-03-16 | ✅ 완료 |
 
 ---
 
