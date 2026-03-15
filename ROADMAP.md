@@ -104,7 +104,7 @@ Backend API (FastAPI) — localhost:8000
 - FastAPI 백엔드 초기 설정 (CORS, Docker, pytest)
 - frontend lib/api.ts stub → 실 API 호출로 교체
 
-#### Sprint 4 (Day 2)
+#### Sprint 4 (Day 2) — ✅ 완료 (2026-03-15)
 - "이미지 분석 시작" 버튼과 백엔드 OCR/이미지 인식 API 연결
 - 조회 결과 UI 레이아웃 구성
   - 최상단: 유추된 주요 병명 표시
@@ -123,7 +123,7 @@ Backend API (FastAPI) — localhost:8000
 | Sprint 1 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 2 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 3 완료 | 2026-03-15 | ✅ 완료 |
-| Sprint 4 완료 (MVP 출시) | 2026-03-16 | 📋 예정 |
+| Sprint 4 완료 (MVP 출시) | 2026-03-15 | ✅ 완료 |
 
 ---
 
