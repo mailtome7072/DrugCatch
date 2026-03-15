@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import os
+import re
 from typing import List
 
 
@@ -60,7 +61,6 @@ def identify_drugs_from_image(image_bytes: bytes, media_type: str = "image/jpeg"
             if "약품명:" in line:
                 name = line.split("약품명:", 1)[1].strip().strip("[]").strip()
                 # 괄호 설명 제거: "ZC81 (분홍색 정제)" → "ZC81"
-                import re
                 name = re.sub(r"\s*[\(\（].*?[\)\）]", "", name).strip()
                 # 식별 불가 항목 제외
                 if name and "미상" not in name and "불명" not in name:
