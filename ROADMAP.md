@@ -134,6 +134,17 @@ Backend API (FastAPI) — localhost:8000
 - `test_drug_api.py` 8개 테스트 (httpx mock 기반)
 - 전체 40개 테스트 통과, 외부 API 실제 호출 없음
 
+#### Sprint 8 — ✅ 완료 (2026-03-16)
+- Jest + React Testing Library 설정 (`jest.config.ts`, `jest.setup.ts`)
+- `inferDiseases.test.ts` 7개 단위 테스트 통과
+- `api.test.ts` 5개 단위 테스트 통과
+- `UploadPage.test.tsx` 8개 컴포넌트 테스트 통과
+- `ResultPage.test.tsx` 6개 컴포넌트 테스트 통과
+- 단위/컴포넌트 테스트 합계 26개, 전체 통과
+- Playwright E2E 설정 완료 (`playwright.config.ts`, `e2e/` 7개 시나리오, CI 실행)
+- Lighthouse CI GitHub Actions 연동 (`lighthouserc.json`, `.github/workflows/lighthouse.yml`)
+- `.github/workflows/ci.yml` 프론트엔드 단위 테스트 job 추가
+
 ---
 
 ## 7. 마일스톤
@@ -148,6 +159,7 @@ Backend API (FastAPI) — localhost:8000
 | Sprint 5 완료 (낱알식별) | 2026-03-15 | ✅ 완료 |
 | Sprint 6 완료 (Vision API) | 2026-03-15 | ✅ 완료 |
 | Sprint 7 완료 (단위 테스트) | 2026-03-16 | ✅ 완료 |
+| Sprint 8 완료 (프론트엔드 테스트) | 2026-03-16 | ✅ 완료 |
 
 ---
 

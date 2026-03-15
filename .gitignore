@@ -19,6 +19,8 @@ lib/
 lib64/
 # frontend/lib/ 은 Next.js 소스 코드이므로 예외 처리
 !frontend/lib/
+# frontend/__tests__/lib/ 은 Jest 단위 테스트이므로 예외 처리
+!frontend/__tests__/lib/
 parts/
 sdist/
 var/
@@ -128,3 +130,7 @@ temp/
 *.pptx
 *.ppt
 *.pem
+output.txt
+netlify.toml
+frontend/.claude/
+**/.claude/

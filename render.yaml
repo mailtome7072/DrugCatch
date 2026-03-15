@@ -1,0 +1,28 @@
+services:
+  # ─── 백엔드 (FastAPI) ───────────────────────────────────────────
+  - type: web
+    name: drugcatch-backend
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: PYTHONPATH
+        value: /app
+      - key: DRUG_API_KEY
+        sync: false   # Render 대시보드에서 직접 입력
+      - key: ANTHROPIC_API_KEY
+        sync: false   # Render 대시보드에서 직접 입력
+
+  # ─── 프론트엔드 (Next.js) ─────────────────────────────────────────
+  - type: web
+    name: drugcatch-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://drugcatch-backend.onrender.com

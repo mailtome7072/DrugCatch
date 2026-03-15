@@ -308,6 +308,7 @@ export default function UploadPage() {
           </div>
           {/* 버튼 아래 안내 문구 */}
           <div className="mt-5 flex flex-col items-center text-center text-sm text-red-500" style={{ gap: '5px' }}>
+            <span className="text-blue-500">무료 호스팅 서버로 분석에 수분이 소요됩니다.</span>
             <span>분석을 위한 이미지는 저장되지 않습니다.</span>
             <span>분석 대상 이미지: 처방전, 약봉투(복약지도 출력물), 처방 약제</span>
             <span>처방 약제는 상표나 로고 글씨가 확인 가능해야 합니다</span>
@@ -353,6 +354,7 @@ export default function UploadPage() {
         {/* 선택 영역/카메라 뷰파인더 아래 안내 문구 (미리보기 없을 때) */}
         {!previewUrl && (
           <div className="mt-5 flex flex-col items-center text-center text-sm text-red-500" style={{ gap: '5px' }}>
+            <span className="text-blue-500">무료 호스팅 서버로 분석에 수분이 소요됩니다.</span>
             <span>분석을 위한 이미지는 저장되지 않습니다.</span>
             <span>분석 대상 이미지: 처방전, 약봉투(복약지도 출력물), 처방 약제</span>
             <span>처방 약제는 상표나 로고 글씨가 확인 가능해야 합니다</span>
