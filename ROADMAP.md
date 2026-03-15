@@ -113,6 +113,13 @@ Backend API (FastAPI) — localhost:8000
 - 에러 처리 및 로깅
 - 내부 테스트 및 피드백 반영
 
+#### Sprint 5 — ✅ 완료 (2026-03-15)
+- 이미지 기반 알약 낱알식별 파이프라인 구현
+- OpenCV+pytesseract로 알약 모양/색상/식별문자 추출 (pill_identifier.py)
+- 식약처 낱알식별 API 연동 (`fetch_drug_by_features`)
+- packaged_drug/unknown 이미지에서 낱알 파이프라인 순차 실행
+- OCR 결과와 낱알식별 결과 중복 없이 병합
+
 ---
 
 ## 7. 마일스톤
@@ -124,6 +131,7 @@ Backend API (FastAPI) — localhost:8000
 | Sprint 2 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 3 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 4 완료 (MVP 출시) | 2026-03-15 | ✅ 완료 |
+| Sprint 5 완료 (낱알식별) | 2026-03-15 | ✅ 완료 |
 
 ---
 

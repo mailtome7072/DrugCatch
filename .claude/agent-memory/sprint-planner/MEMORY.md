@@ -13,8 +13,9 @@
 | Sprint 2 | 이미지 입력 방식 선택, 미리보기, 분석 시작 버튼 | ✅ 완료 | 2026-03-15 | sprint2 |
 | Sprint 3 | OCR/이미지 인식 백엔드 모듈 | ✅ 완료 | 2026-03-15 | sprint3 |
 | Sprint 4 | 프론트-백엔드 연동, 결과 화면 UI | ✅ 완료 | 2026-03-15 | sprint4 |
+| Sprint 5 | 이미지 기반 알약 낱알식별 파이프라인 | ✅ 완료 | 2026-03-15 | sprint5 |
 
-**다음 사용 가능한 스프린트 번호: Sprint 5**
+**다음 사용 가능한 스프린트 번호: Sprint 6**
 
 ---
 
@@ -78,3 +79,6 @@ frontend/
 - 분석 결과는 sessionStorage(`analysisResult` 키)로 업로드 페이지 → 결과 페이지 간 전달
 - `inferDiseases.ts`의 `KEYWORD_MAP`은 현재 43개 키워드 — 약품 데이터 확장 시 함께 확장 필요
 - MVP Phase 1 전체 완료 (Sprint 1~4): 동의 UI → 업로드 → OCR 분석 → 결과 화면 흐름 구현 완료
+- Sprint 5에서 `pill_identifier.py` 신규 추가: `identify_pills(image_bytes)` → `List[PillFeatures]` 반환
+- `drug_api.py`의 `_pill_cache`는 dict 기반 무한 성장 캐시 — Sprint 6 이후 크기 제한 개선 고려
+- `_map_hsv_to_color_name()`은 식약처 낱알식별 API 색상명과 매핑됨 (하양/빨강/주황/노랑/초록/청록/파랑/남색/보라/분홍/회색/검정)
