@@ -10,6 +10,8 @@
 
 ```
 DrugCatch/
+├── frontend/                   # Next.js 프론트엔드 (Sprint 1~2)
+├── backend/                    # Python 백엔드 - OCR/이미지 인식 (Sprint 3~4)
 ├── .claude/
 │   ├── agents/             # Claude 에이전트 정의
 │   │   ├── sprint-planner.md   # 스프린트 계획 수립 에이전트
@@ -30,11 +32,13 @@ DrugCatch/
 ├── docs/
 │   ├── dev-process.md          # 개발 프로세스 가이드 (Single Source of Truth)
 │   ├── ci-policy.md            # CI/CD 정책
+│   ├── git-convention.md       # 브랜치·커밋·PR 협업 규칙
 │   ├── setup-guide.md          # 환경 설정 가이드
 │   ├── sprint/                 # 스프린트 계획/완료 문서
 │   └── deploy-history/         # 배포/검증 기록 아카이브
 ├── CLAUDE.md                   # Claude Code 프로젝트 지시 파일
 ├── ROADMAP.md                  # 프로젝트 로드맵
+├── LICENSE                     # MIT 라이선스
 ├── deploy.md                   # 현재 미완료 수동 작업 목록
 └── .env.example                # 환경변수 템플릿
 ```
@@ -173,7 +177,7 @@ PR이 `develop` 또는 `main`으로 올라오면 자동 실행:
 - Docker 이미지 빌드 & GHCR push
 - SSH를 통한 프로덕션 서버 배포
 
-> **TODO**: `deploy.yml`의 이미지명과 서버 경로를 실제 프로젝트 값으로 변경하세요.
+> 이미지명: `ghcr.io/mailtome7072/drugcatch-{backend|frontend|nginx}` · 서버: GitHub Secrets(`LIGHTSAIL_HOST`) 참조
 
 ---
 

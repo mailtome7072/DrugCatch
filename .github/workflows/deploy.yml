@@ -9,9 +9,9 @@ env:
   REGISTRY: ghcr.io
   # TODO: 아래 이미지명을 프로젝트에 맞게 수정하세요
   # 예시: BACKEND_IMAGE: ghcr.io/your-org/your-project-backend
-  BACKEND_IMAGE: ghcr.io/YOUR_GITHUB_ORG/YOUR_PROJECT-backend
-  FRONTEND_IMAGE: ghcr.io/YOUR_GITHUB_ORG/YOUR_PROJECT-frontend
-  NGINX_IMAGE: ghcr.io/YOUR_GITHUB_ORG/YOUR_PROJECT-nginx
+  BACKEND_IMAGE: ghcr.io/mailtome7072/drugcatch-backend
+  FRONTEND_IMAGE: ghcr.io/mailtome7072/drugcatch-frontend
+  NGINX_IMAGE: ghcr.io/mailtome7072/drugcatch-nginx
 
 jobs:
   build-and-push:
