@@ -17,9 +17,9 @@
 - ✅ GitHub Actions CI (`ci.yml`) 프론트엔드 단위 테스트 job 추가
 - ✅ Playwright E2E 설정 완료 (7개 시나리오, CI 실행)
 - ✅ Lighthouse CI GitHub Actions 연동 완료
-- ⬜ `npm run test:e2e` — 로컬 서버 기동 후 E2E 7개 시나리오 직접 확인
-- ⬜ `npx lhci autorun` — 로컬에서 LCP/CLS 임계값 충족 여부 확인
-- ⬜ GitHub Actions CI 실제 실행 결과 확인 (push 후)
+- ✅ `npm run test:e2e` — 로컬 서버 기동 후 E2E 7개 시나리오 직접 확인
+- ✅ `npx lhci autorun` — 로컬에서 LCP/CLS 임계값 충족 여부 확인
+- ✅ GitHub Actions CI 실제 실행 결과 확인 (push 후)
 
 ---
 
