@@ -3,9 +3,10 @@
     "collect": {
       "url": ["http://localhost:3000/upload"],
       "numberOfRuns": 1,
-      "settings": {
-        "preset": "desktop"
-      }
+      "settings": [
+        { "preset": "desktop" },
+        { "preset": "mobile" }
+      ]
     },
     "assert": {
       "assertions": {
