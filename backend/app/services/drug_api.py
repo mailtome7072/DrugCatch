@@ -10,7 +10,8 @@ import httpx
 from app.models.schemas import DrugInfo
 
 API_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList"
-PILL_API_URL = "https://apis.data.go.kr/1471000/MdcinGrnIdntfcInfoService01/getMdcinGrnIdntfcInfoList01"
+# v01은 중단됨. v03는 item_name 검색만 지원하며 shape/color 응답 필드 포함
+PILL_API_URL = "https://apis.data.go.kr/1471000/MdcinGrnIdntfcInfoService03/getMdcinGrnIdntfcInfoList03"
 
 # 낱알식별 API 결과 캐시 (파라미터 key → List[DrugInfo])
 _pill_cache: dict = {}
@@ -104,47 +105,54 @@ def fetch_drug_by_features(
     print_front: str = "",
 ) -> List[DrugInfo]:
     """
-    식약처 낱알식별 API로 알약 시각적 특징 기반 약품 조회.
-    shape, color1, print_front 조합으로 조회하며 빈 값은 파라미터에서 제외.
+    식약처 낱알식별 API(v03)로 알약 식별.
+    - print_front(식별문자)가 있으면 item_name으로 검색 후 shape/color로 후처리 필터
+    - print_front가 없으면 검색 불가 (v03는 shape/color 파라미터 필터 미지원)
     """
+    # 식별문자 없이는 의미 있는 검색 불가
+    if not print_front or len(print_front) < 2:
+        return []
+
     cache_key = f"{shape}|{color1}|{color2 or ''}|{print_front}"
     if cache_key in _pill_cache:
         return _pill_cache[cache_key]
 
     try:
-        params: dict = {
-            "serviceKey": _get_api_key(),
-            "type": "json",
-            "numOfRows": 3,
-            "pageNo": 1,
-        }
-        if shape:
-            params["drug_shape"] = shape
-        if color1:
-            params["color_class1"] = color1
-        if color2:
-            params["color_class2"] = color2
-        if print_front:
-            params["print_front"] = print_front
-
-        resp = httpx.get(PILL_API_URL, params=params, timeout=5.0)
+        resp = httpx.get(
+            PILL_API_URL,
+            params={
+                "serviceKey": _get_api_key(),
+                "type": "json",
+                "numOfRows": 10,
+                "pageNo": 1,
+                "item_name": print_front,
+            },
+            timeout=5.0,
+        )
         resp.raise_for_status()
         body = resp.json()
 
         items = body.get("body", {}).get("items") or []
         results: List[DrugInfo] = []
         for item in items:
-            # 응답 필드명은 대문자 (ITEM_NAME, CHART 등)
             name = item.get("ITEM_NAME", "")
             if not name:
                 continue
+            # shape/color 후처리 필터 (일치하지 않으면 제외)
+            item_shape = item.get("DRUG_SHAPE", "")
+            item_color = item.get("COLOR_CLASS1", "")
+            if shape and item_shape and item_shape != shape:
+                continue
+            if color1 and item_color and item_color != color1:
+                continue
             results.append(DrugInfo(
                 drug_name=name,
-                generic_name=item.get("CHART", ""),  # 성상 (CLASS_NAME 없음)
+                generic_name=item.get("CLASS_NAME", ""),
                 usage="",
                 dosage="",
                 caution="",
                 matched=True,
+                image_url=item.get("ITEM_IMAGE") or None,
             ))
 
         _pill_cache[cache_key] = results
