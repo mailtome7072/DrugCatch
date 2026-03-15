@@ -128,3 +128,7 @@ temp/
 *.pptx
 *.ppt
 *.pem
+output.txt
+netlify.toml
+frontend/.claude/
+**/.claude/
