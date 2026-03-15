@@ -7,13 +7,22 @@
 
 ## 현재 미완료 항목
 
-### Sprint 3 — FastAPI 백엔드 OCR API (2026-03-15)
+### 프로덕션 배포 — v0.3.0 Sprint 3 (2026-03-15)
 
-**자동 검증 완료**
+포함 스프린트: Sprint 3 (FastAPI 백엔드 OCR API)
 
-- ✅ `pytest backend/tests/` 통과 (4 passed, 1 skipped — Tesseract 조건부 스킵)
-- ✅ `/health` 엔드포인트 HTTP 200 응답 확인
-- ✅ 비이미지 파일 업로드 시 HTTP 422 에러 응답 확인
+**자동 배포**
+
+- ✅ develop → master fast-forward merge 완료
+- ✅ main merge 시 GitHub Actions 자동 배포 시작 (GHCR 이미지 push → SSH 배포)
+
+**실서버 자동 검증** — 서버 SSH 접속 정보 미설정으로 자동 검증 미수행
+
+- ⬜ `docs/dev-process.md` 섹션 6.3 SSH 접속 정보 설정 후 아래 항목 수행
+- ⬜ `/api/v1/health` 헬스체크 HTTP 200 확인
+- ⬜ 컨테이너 상태 확인 (`docker compose -f docker-compose.prod.yml ps`)
+- ⬜ 백엔드 로그 오류 없음 확인
+- ⬜ 프론트엔드 메인 페이지 로딩 확인
 
 **수동 검증 필요**
 
