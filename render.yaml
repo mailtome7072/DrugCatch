@@ -3,8 +3,8 @@ services:
   - type: web
     name: drugcatch-backend
     env: docker
-    dockerfilePath: ./docker/backend/Dockerfile.prod
-    dockerContext: .
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     plan: free
     envVars:
       - key: PYTHONPATH
@@ -18,8 +18,8 @@ services:
   - type: web
     name: drugcatch-frontend
     env: docker
-    dockerfilePath: ./docker/frontend/Dockerfile.prod
-    dockerContext: .
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
     plan: free
     buildArgs:
       - key: NEXT_PUBLIC_API_URL
