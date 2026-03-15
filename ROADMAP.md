@@ -120,6 +120,13 @@ Backend API (FastAPI) — localhost:8000
 - packaged_drug/unknown 이미지에서 낱알 파이프라인 순차 실행
 - OCR 결과와 낱알식별 결과 중복 없이 병합
 
+#### Sprint 6 — ✅ 완료 (2026-03-15)
+- Claude Vision API(claude-haiku-4-5-20251001) 기반 알약 이미지 직접 분석
+- `vision_identifier.py` 신규 생성 — 약품명 추출 및 괄호 설명 제거, 미상 항목 필터링
+- `analyze.py` 낱알 파이프라인 → Vision 파이프라인 교체, 디버그 로그 전체 제거
+- `ANTHROPIC_API_KEY` 미설정 시 graceful fallback 구현
+- Docker 빌드 오류(`libgl1-mesa-glx` → `libgl1`) 수정
+
 ---
 
 ## 7. 마일스톤
@@ -132,6 +139,7 @@ Backend API (FastAPI) — localhost:8000
 | Sprint 3 완료 | 2026-03-15 | ✅ 완료 |
 | Sprint 4 완료 (MVP 출시) | 2026-03-15 | ✅ 완료 |
 | Sprint 5 완료 (낱알식별) | 2026-03-15 | ✅ 완료 |
+| Sprint 6 완료 (Vision API) | 2026-03-15 | ✅ 완료 |
 
 ---
 

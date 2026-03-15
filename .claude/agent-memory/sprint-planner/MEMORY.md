@@ -14,8 +14,9 @@
 | Sprint 3 | OCR/이미지 인식 백엔드 모듈 | ✅ 완료 | 2026-03-15 | sprint3 |
 | Sprint 4 | 프론트-백엔드 연동, 결과 화면 UI | ✅ 완료 | 2026-03-15 | sprint4 |
 | Sprint 5 | 이미지 기반 알약 낱알식별 파이프라인 | ✅ 완료 | 2026-03-15 | sprint5 |
+| Sprint 6 | Claude Vision API 연동으로 알약 이미지 직접 분석 | ✅ 완료 | 2026-03-15 | sprint6 |
 
-**다음 사용 가능한 스프린트 번호: Sprint 6**
+**다음 사용 가능한 스프린트 번호: Sprint 7**
 
 ---
 
@@ -82,3 +83,9 @@ frontend/
 - Sprint 5에서 `pill_identifier.py` 신규 추가: `identify_pills(image_bytes)` → `List[PillFeatures]` 반환
 - `drug_api.py`의 `_pill_cache`는 dict 기반 무한 성장 캐시 — Sprint 6 이후 크기 제한 개선 고려
 - `_map_hsv_to_color_name()`은 식약처 낱알식별 API 색상명과 매핑됨 (하양/빨강/주황/노랑/초록/청록/파랑/남색/보라/분홍/회색/검정)
+- Sprint 6에서 Vision 파이프라인 도입: `vision_identifier.py` 신규, `analyze.py` 낱알 파이프라인 → Vision 파이프라인 교체, `anthropic` 패키지 추가
+- `pill_identifier.py`는 Sprint 6에서도 삭제하지 않고 유지 (향후 재활용 가능성)
+- `analyze.py`의 `[DEBUG]` 로그는 Sprint 6에서 전체 제거 완료
+- Sprint 6에서 `vision_identifier.py` 내 `import re`가 루프 내부에 위치 — 동작에는 무관, 추후 최상단 이동 권장
+- Sprint 6에서 `vision_identifier.py` 단위 테스트 없음 — 외부 API 의존성으로 인해 mock 기반 단위 테스트 추후 추가 권장
+- `ANTHROPIC_API_KEY` 환경변수 미설정 시 Vision 파이프라인은 빈 리스트 반환 (graceful fallback, Sprint 6~)
