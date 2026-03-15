@@ -6,6 +6,18 @@
 
 ---
 
+## 🌐 배포 URL
+
+| 서비스 | URL |
+|--------|-----|
+| 프론트엔드 | https://drugcatch-frontend.onrender.com |
+| 백엔드 API | https://drugcatch-backend.onrender.com |
+| 헬스체크 | https://drugcatch-backend.onrender.com/health |
+
+> **무료 호스팅(Render) 이용 중** — 비활성 시 슬립 상태가 되어 첫 요청이 50초 이상 지연될 수 있습니다.
+
+---
+
 ## 📁 프로젝트 구조
 
 ```
@@ -136,10 +148,16 @@ PRD(제품 요구사항 문서)를 분석하여 Agile/스크럼 방법론에 기
 ### 1. 로컬 개발 환경 설정
 
 1. `docs/setup-guide.md` 가이드에 따라 로컬 환경을 구성합니다.
-2. `.env.example`을 복사하여 `.env` 생성 후 값 입력합니다.
-3. `docs/dev-process.md` 섹션 6.3에 실서버 SSH 접속 정보를 기입합니다.
-4. `.github/workflows/deploy.yml`에서 이미지명 플레이스홀더 (`YOUR_GITHUB_ORG`, `YOUR_PROJECT`) 를 변경합니다.
-5. GitHub Secrets 설정 (`LIGHTSAIL_SSH_KEY`, `LIGHTSAIL_HOST`, 등)
+2. `.env.example`을 복사하여 `backend/.env` 생성 후 값 입력합니다.
+3. `docker compose up --build` 로 로컬 서버를 기동합니다.
+
+### 2. Render 배포 환경 설정
+
+1. Render 대시보드에서 `render.yaml` Blueprint로 서비스 2개 생성
+2. `drugcatch-backend` 서비스 환경변수 설정:
+   - `DRUG_API_KEY`: 공공데이터포털 식약처 API 키
+   - `ANTHROPIC_API_KEY`: Claude API 키
+3. GitHub push 시 자동 배포
 
 ### 2. CLAUDE.md 커스터마이징
 
@@ -171,13 +189,13 @@ PR이 `develop` 또는 `main`으로 올라오면 자동 실행:
 - 백엔드 pytest 테스트
 - Docker 이미지 빌드 검증
 
-### CD (`.github/workflows/deploy.yml`)
+### CD (Render 자동 배포)
 
-`main`에 push되면 자동 실행:
-- Docker 이미지 빌드 & GHCR push
-- SSH를 통한 프로덕션 서버 배포
+`master`에 push되면 Render가 자동으로 빌드 및 배포 실행:
+- `drugcatch-backend`: `backend/Dockerfile` 기반 빌드
+- `drugcatch-frontend`: `frontend/Dockerfile` 기반 빌드
 
-> 이미지명: `ghcr.io/mailtome7072/drugcatch-{backend|frontend|nginx}` · 서버: GitHub Secrets(`LIGHTSAIL_HOST`) 참조
+롤백이 필요한 경우 `scripts/rollback.sh` 참조.
 
 ---
 
