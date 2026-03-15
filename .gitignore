@@ -128,3 +128,5 @@ temp/
 *.pptx
 *.ppt
 *.pem
+output.txt
+frontend/.claude/
