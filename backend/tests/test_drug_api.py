@@ -9,7 +9,6 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-import app.services.drug_api as drug_api_module
 from app.services.drug_api import fetch_drug_by_features, fetch_drug_info
 
 
@@ -25,7 +24,7 @@ def _mock_response(body: dict, status_code: int = 200):
 class TestFetchDrugInfo:
     def setup_method(self):
         fetch_drug_info.cache_clear()
-        drug_api_module._pill_cache.clear()
+        fetch_drug_by_features.cache_clear()
 
     def test_returns_drug_info_on_valid_response(self):
         """정상 API 응답 → DrugInfo 반환"""
@@ -68,7 +67,7 @@ class TestFetchDrugInfo:
 class TestFetchDrugByFeatures:
     def setup_method(self):
         fetch_drug_info.cache_clear()
-        drug_api_module._pill_cache.clear()
+        fetch_drug_by_features.cache_clear()
 
     def test_returns_empty_when_print_front_too_short(self):
         """print_front 길이 < 2 → 빈 리스트"""

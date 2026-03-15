@@ -13,8 +13,6 @@ API_URL = "https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrug
 # v01은 중단됨. v03는 item_name 검색만 지원하며 shape/color 응답 필드 포함
 PILL_API_URL = "https://apis.data.go.kr/1471000/MdcinGrnIdntfcInfoService03/getMdcinGrnIdntfcInfoList03"
 
-# 낱알식별 API 결과 캐시 (파라미터 key → List[DrugInfo])
-_pill_cache: dict = {}
 
 
 def _get_api_key() -> str:
@@ -98,6 +96,7 @@ def _call_api(item_name: str) -> Optional[DrugInfo]:
         return None
 
 
+@lru_cache(maxsize=256)
 def fetch_drug_by_features(
     shape: str,
     color1: str,
@@ -112,10 +111,6 @@ def fetch_drug_by_features(
     # 식별문자 없이는 의미 있는 검색 불가
     if not print_front or len(print_front) < 2:
         return []
-
-    cache_key = f"{shape}|{color1}|{color2 or ''}|{print_front}"
-    if cache_key in _pill_cache:
-        return _pill_cache[cache_key]
 
     try:
         resp = httpx.get(
@@ -155,7 +150,6 @@ def fetch_drug_by_features(
                 image_url=item.get("ITEM_IMAGE") or None,
             ))
 
-        _pill_cache[cache_key] = results
         return results
     except Exception:
         return []
